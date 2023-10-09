@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2023 juny(juny8592@gmail.com)
+Copyright (c) 2023 juny(junyharang8592@gmail.com - https://junyharang.tistory.com/)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

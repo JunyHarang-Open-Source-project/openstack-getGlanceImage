@@ -17,3 +17,4 @@
 
 ### Where should I leave the inquiry while using it?
    - Please send me an email to junyharang8592@gmail.com. 🤭
+   - Juny Harang Blog: https://junyharang.tistory.com/

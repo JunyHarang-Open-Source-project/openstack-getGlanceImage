@@ -17,3 +17,4 @@
 
 ### 사용 중 문의는 어디로 남기면 되나요?
   - junyharang8592@gmail.com 으로 메일 부탁드릴게요. 🤭
+  - Juny Harang Blog: https://junyharang.tistory.com/
