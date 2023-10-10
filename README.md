@@ -92,5 +92,6 @@ https://github.com/JunyHarang-Open-Source-project/openstack-getGlanceImage/relea
   - **junyharang8592@gmail.com 으로 메일 부탁드릴게요. 🤭**
   - **주니하랑 기술 Blog: https://junyharang.tistory.com/**
 <br><br>
+
 [![Openstack Cloud Computing Cookbook - Third Edition Paperback](https://image.yes24.com/momo/TopCate2516/MidCate010/251596375.jpg)](https://link.coupang.com/a/bb3Kah)<br>
 "이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다."
