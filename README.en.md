@@ -1,5 +1,8 @@
 [KOREAN](https://github.com/JunyHarang-Open-Source-project/openstack-getGlanceImage/blob/master/README.md) | [For English](https://github.com/JunyHarang-Open-Source-project/openstack-getGlanceImage/blob/master/README.en.md)
 
+[![Kim Taeyong's introduction to Linux shell script programming](https://shopping-phinf.pstatic.net/main_3243614/32436142895.20221230074729.jpg?type=w300)](https://link.coupang.com/a/bb3Kah)<br>
+"This posting is part of Coupang Partners' activities and receives a certain amount of commission accordingly."
+
 # OpenStack Glance Image Download Program
 
 ## 🚀 what's this for
@@ -85,4 +88,7 @@ https://github.com/JunyHarang-Open-Source-project/openstack-getGlanceImage/relea
 
 ### 🔽 Where should I leave the inquiry while using it?
    - **Please email me to junyharang8592@gmail.com. 🤭**
-   - **Juny Harang Tech Blog: https://junyharang.tistory.com/**
+   - **Juny Harang Tech Blog: https://junyharang.tistory.com/** 
+<br><br>
+[![Openstack Cloud Computing Cookbook - Third Edition Paperback](https://image.yes24.com/momo/TopCate2516/MidCate010/251596375.jpg)](https://link.coupang.com/a/bb3Kah)<br>
+"This posting is part of Coupang Partners' activities and receives a certain amount of commission accordingly."
