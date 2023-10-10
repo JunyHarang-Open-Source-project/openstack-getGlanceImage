@@ -7,12 +7,7 @@ TODAY=$(date +"%Y-%m-%d")
 LOG_DIR="/var/log/openstack/glance/image/centOs6/${TODAY}"
 LOG_FILE="${LOG_DIR}/createOpenStackImages.log"
 IMAGES_DIR="/root/download/openstack/images"
-
-# -------------------------------------------------------
-# SSH Access Web Hook Notification
-# Written by: Juny(junyharang8592@gmail.com)
-# Last updated on: 2023/10/08
-# -------------------------------------------------------
+DOWNLOAD_OS_NAME="CentOS6"
 
 GET_CENT_OS_URL="http://cloud.centos.org/centos/6/images/"
 
@@ -21,7 +16,7 @@ licenseNotice() {
   echo "[$ACCESS_DATE] [NOTICE] 해당 Shell Script License에 대한 내용 고지합니다. 숙지하시고, 사용 부탁드립니다."
 
   echo "[$ACCESS_DATE] [NOTICE] http://opensource.org/licenses/MIT"
-  echo "[$ACCESS_DATE] [NOTICE] Copyright (c) 2023 juny(juny8592@gmail.com)"
+  echo "[$ACCESS_DATE] [NOTICE] Copyright (c) 2023 juny(juny8592@gmail.com) Tech Blog: https://junyharang.tistory.com/"
   echo "[$ACCESS_DATE] [NOTICE] Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the \"Software\"), to deal
   in the Software without restriction, including without limitation the rights
@@ -46,8 +41,8 @@ checkLogRelevant() {
 
   if [ -d "$LOG_DIR" ];
   then
-    echo "==== [$ACCESS_DATE] 오픈스택 CentOS 이미지 내려받기 스크립트 동작(Open Stack CentOS Image Download Script Behavior) ===="  >> "$LOG_FILE" 2>&1
-    echo "@Author: Juny(junyharang8592@gmail.com)"  >> "$LOG_FILE" 2>&1
+    echo "==== [$ACCESS_DATE] 오픈스택 $DOWNLOAD_OS_NAME 이미지 내려받기 스크립트 동작(Open Stack $DOWNLOAD_OS_NAME Image Download Script Behavior) ===="  >> "$LOG_FILE" 2>&1
+    echo "@Author: Juny(junyharang8592@gmail.com) - Tech Blog: https://junyharang.tistory.com/"  >> "$LOG_FILE" 2>&1
 
     echo "[$ACCESS_DATE] [INFO] Log 저장을 위한 Directory가 존재 합니다.(Directory exists for saving the log.)"
     echo "[$ACCESS_DATE] [INFO] Log 저장을 위한 Directory가 존재 합니다.(Directory exists for saving the log.)" >> "$LOG_FILE" 2>&1
@@ -61,8 +56,8 @@ checkLogRelevant() {
 
       exit 1
      else
-       echo "==== [$ACCESS_DATE] 오픈스택 CentOS 이미지 내려받기 스크립트 동작(Open Stack CentOS Image Download Script Behavior) ===="  >> "$LOG_FILE" 2>&1
-       echo "@Author: Juny(junyharang8592@gmail.com)"  >> "$LOG_FILE" 2>&1
+       echo "==== [$ACCESS_DATE] 오픈스택 $DOWNLOAD_OS_NAME 이미지 내려받기 스크립트 동작(Open Stack $DOWNLOAD_OS_NAME Image Download Script Behavior) ===="  >> "$LOG_FILE" 2>&1
+       echo "@Author: Juny(junyharang8592@gmail.com) - Tech Blog: https://junyharang.tistory.com/"  >> "$LOG_FILE" 2>&1
 
        echo "[$ACCESS_DATE] [INFO] Log 저장을 위한 Directory가 존재 하지 않아 생성 하였습니다.(Created because Directory for Log Storage does not exist.)"
        echo "[$ACCESS_DATE] [INFO] Log 저장을 위한 Directory가 존재 하지 않아 생성 하였습니다.(Created because Directory for Log Storage does not exist.)" >> "$LOG_FILE" 2>&1
@@ -74,13 +69,11 @@ checkLogRelevant() {
 
 getCentOSList() {
   resultArray=()
-  echo "[$ACCESS_DATE] [INFO] CentOS에 대한 이미지를 내려 받을게요. 내려 받는 곳: $GET_CENT_OS_URL (download the image for CentOS. From: $GET_CENT_OS_URL)"
-  echo "[$ACCESS_DATE] [INFO] CentOS에 대한 이미지를 내려 받을게요. 내려 받는 곳: $GET_CENT_OS_URL (download the image for CentOS. From: $GET_CENT_OS_URL)" >> "$LOG_FILE" 2>&1
+  echo "[$ACCESS_DATE] [INFO] $DOWNLOAD_OS_NAME 이미지를 내려 받을게요. 내려 받는 곳: $GET_CENT_OS_URL (download the image for CentOS. From: $GET_CENT_OS_URL)"
+  echo "[$ACCESS_DATE] [INFO] $DOWNLOAD_OS_NAME 이미지를 내려 받을게요. 내려 받는 곳: $GET_CENT_OS_URL (download the image for CentOS. From: $GET_CENT_OS_URL)" >> "$LOG_FILE" 2>&1
 
-  # 페이지 내용을 wget을 사용하여 가져옵니다.(Import page contents using wget.)
   getPageContent=$(wget -q -O - "$GET_CENT_OS_URL")
 
-  # 페이지 내용에서 CentOS 6 이미지 파일 목록을 추출합니다.(Extract a list of CentOS 6 image files from the contents of the page.)
   getCentosImageList=$(echo "$getPageContent" | grep -oE 'href=".*GenericCloud.*\.qcow2"' | sed 's/href="//' | sed 's/"//')
 
   while IFS= read -r line;
@@ -127,25 +120,25 @@ choiceImages() {
 
   read -r -p "몇 개의 Image가 필요해요? (선택 가능한 개수: $imageListLength) How many images do you need? (selectable number: $imageListLength): " choiceImagesNumber
 
-  echo "[$ACCESS_DATE] [DEBUG] 사용자가 선택한 내려 받을 Image 개수: $choiceImagesNumber"
-  echo "[$ACCESS_DATE] [DEBUG] 사용자가 선택한 내려 받을 Image 개수: $choiceImagesNumber" >> "$LOG_FILE" 2>&1
+  echo "[$ACCESS_DATE] [DEBUG] 사용자가 선택한 내려 받을 Image 개수(Number of download images selected by the user): $choiceImagesNumber"
+  echo "[$ACCESS_DATE] [DEBUG] 사용자가 선택한 내려 받을 Image 개수(Number of download images selected by the user): $choiceImagesNumber" >> "$LOG_FILE" 2>&1
 
   read -p "내려 받을 이미지 순서 번호를 선택 해주세요. (여러 개 선택 가능, 스페이스로 구분) Please select the image order number to download. (Multiple choices available, separated by space): " selectedNumbers
 
   IFS=' ' read -ra selectedArray <<< "$selectedNumbers"
   selectedUserImageCount="${#selectedArray[@]}"
 
-  echo "[$ACCESS_DATE] [DEBUG] 사용자가 선택한 Image 순서 번호 개수: $selectedUserImageCount"
-  echo "[$ACCESS_DATE] [DEBUG] 사용자가 선택한 Image 순서 번호 개수: $selectedUserImageCount" >> "$LOG_FILE" 2>&1
+  echo "[$ACCESS_DATE] [DEBUG] 사용자가 선택한 Image 순서 번호 개수(Number of Image Order Numbers Selected by the User): $selectedUserImageCount"
+  echo "[$ACCESS_DATE] [DEBUG] 사용자가 선택한 Image 순서 번호 개수(Number of Image Order Numbers Selected by the User): $selectedUserImageCount" >> "$LOG_FILE" 2>&1
 
-  for imageListIndex in "${selectedArray[@]}";
+  for downloadTagerImageIndex in "${selectedArray[@]}";
   do
-    if [[ "$imageListIndex" -ge 0 &&  "$selectedUserImageCount" == "$choiceImagesNumber" ]];
+    if [[ -n "$downloadTagerImageIndex" && "$selectedUserImageCount" == "$choiceImagesNumber" ]];
     then
-      selectedImages+=("${imageList[$imageListIndex]}")  # 선택한 이미지를 배열에 추가
+      selectedImages+=("${imageList[$downloadTagerImageIndex]}")  # 선택한 이미지를 배열에 추가
     else
-      echo "[$ACCESS_DATE] [WARNING] 잘못된 이미지 순서 번호를 입력했어요.(You entered the wrong image order number.) - $imageListIndex"
-      echo "[$ACCESS_DATE] [WARNING] 잘못된 이미지 순서 번호를 입력했어요.(You entered the wrong image order number.) - $imageListIndex" >> "$LOG_FILE" 2>&1
+      echo "[$ACCESS_DATE] [WARNING] 잘못된 이미지 순서 번호를 입력했어요.(You entered the wrong image order number.) - $selectedNumbers"
+      echo "[$ACCESS_DATE] [WARNING] 잘못된 이미지 순서 번호를 입력했어요.(You entered the wrong image order number.) - $selectedNumbers" >> "$LOG_FILE" 2>&1
 
       choiceImages
     fi
@@ -153,10 +146,15 @@ choiceImages() {
 
   for image in "${selectedImages[@]}";
   do
+    (
     echo "[$ACCESS_DATE] [INFO] 내려 받을 Image 이름: $image(Image name to download: $image)"
     echo "[$ACCESS_DATE] [INFO] 내려 받을 Image 이름: $image(Image name to download: $image)" >> "$LOG_FILE" 2>&1
     downloadImage "$image"
+    )&
   done
+  wait
+
+  deleteEnvironmentSetting "${selectedImages[@]}"
 }
 
 choiceAllImages() {
@@ -164,10 +162,15 @@ choiceAllImages() {
 
   for image in "${imageList[@]}";
   do
+    (
     echo "[$ACCESS_DATE] [INFO] 내려 받을 Image 이름: $image(Image name to download: $image)"
     echo "[$ACCESS_DATE] [INFO] 내려 받을 Image 이름: $image(Image name to download: $image)" >> "$LOG_FILE" 2>&1
     downloadImage "$image"
+    )&
   done
+  wait
+
+  deleteEnvironmentSetting "${imageList[@]}"
 }
 
 downloadImage() {
@@ -218,48 +221,77 @@ createdOpenStackImage() {
   else
     echo "[$ACCESS_DATE] [INFO] 이미지 생성 완료(Image creation complete): $imageName"
     echo "[$ACCESS_DATE] [INFO] 이미지 생성 완료(Image creation complete): $imageName" >> "$LOG_FILE" 2>&1
-
-    deleteImages "$imageExtensionName"
   fi
 }
 
-deleteImages() {
-  targetDownloadImageName=$1
+deleteEnvironmentSetting() {
+  local deleteTargetImageList=("$@")
   imageDirectorySize=$(du -sh "$IMAGES_DIR")
   downloadImageList=$(ls -al "$IMAGES_DIR")
+  deleteTargetImageListLength=${#deleteTargetImageList[@]}
+  selectedImages=()
+
+  for ((index=0; index < deleteTargetImageListLength; index++));
+  do
+    echo "내려 받은 $index 번째 Image 이름(Downloaded $index Image Name) : ${deleteTargetImageList[$index]}"
+  done
 
   echo "[$ACCESS_DATE] [INFO] Image 저장 디렉터리 용량 정보(Image Storage Directory Capacity Information) (GB) : $imageDirectorySize"
   echo "[$ACCESS_DATE] [INFO] Image 저장 디렉터리 용량 정보(Image Storage Directory Capacity Information) (GB) : $imageDirectorySize" >> "$LOG_FILE" 2>&1
   echo "[$ACCESS_DATE] [INFO] 내려 받은 Image Directory 목록(Downloaded Image Directory List) : $downloadImageList"
   echo "[$ACCESS_DATE] [INFO] 내려 받은 Image Directory 목록(Downloaded Image Directory List) : $downloadImageList" >> "$LOG_FILE" 2>&1
 
-  read -r -p "Glance Image를 만들기 위해 내려 받은 Image를 삭제하실래요? 삭제 대상 이미지 이름: $targetDownloadImageName (Would you like to delete the downloaded image to create the Glance Image? Delete target image name: $targetDownloadImageName) (0은 취소, 그 외에는 삭제 - 0 is cancelled, otherwise deleted)?: " choiceDeleteOption
+  read -r -p "Glance Image를 만들기 위해 내려 받은 Image를 삭제하실래요? (Would you like to delete the downloaded image to create the Glance Image?) (n(N) 혹은 no(NO)는 취소, y(Y), yes(YES)는 삭제 - Cancel n(N) or no(NO), delete y(Y) and yes(YES)?: " choiceDeleteOption
 
   if [[ "$choiceDeleteOption" == "n" || "$choiceDeleteOption" == "no" ]];
   then
     return
   elif [[ "$choiceDeleteOption" == "y" || "$choiceDeleteOption" == "yes" ]]
   then
+      read -r -p "Image를 어떻게 삭제 할까요? 전체 삭제 0, 선택 삭제 1 (How do I delete the Image? Delete All 0, Delete Selections 1)" choiceDeleteDetailOption
 
-    if [ -n "$targetDownloadImageName" ];
-    then
-      echo "[$ACCESS_DATE] [DEBUG] 삭제 대상 이미지 이름(Delete target image name): $targetDownloadImageName"
-      echo "[$ACCESS_DATE] [DEBUG] 삭제 대상 이미지 이름(Delete target image name): $targetDownloadImageName" >> "$LOG_FILE" 2>&1
-      rm -rf "$IMAGES_DIR/$targetDownloadImageName"
-    else
-      echo "[$ACCESS_DATE] [WARNING] 삭제 대상 이미지가 존재하지 않아요. (Deleted target image does not exist.)"
-      echo "[$ACCESS_DATE] [WARNING] 삭제 대상 이미지가 존재하지 않아요. (Deleted target image does not exist.)" >> "$LOG_FILE" 2>&1
+      if [ "$choiceDeleteDetailOption" -eq 0 ];
+      then
+        deleteImages "${deleteTargetImageList[@]}"
+      elif [ "$choiceDeleteDetailOption" -eq 1 ]
+      then
+        read -r -p "삭제할 이미지 순서 번호를 선택 해주세요. (여러 개 선택 가능, 스페이스로 구분) Please select the image order number to download. (Multiple choices available, separated by space): " selectedDeletedImageNumbers
 
-      return
-    fi
-      deleteCommandResponse=$?
-      checkDeleteCommandResponse $deleteCommandResponse "$targetDownloadImageName"
-  else
-    echo "[$ACCESS_DATE] [WARNING] 잘못된 문자를 입력했어요.(You entered the wrong character) - $imageListIndex"
-    echo "[$ACCESS_DATE] [WARNING] 잘못된 문자를 입력했어요.(You entered the wrong character) - $imageListIndex" >> "$LOG_FILE" 2>&1
+        IFS=' ' read -ra selectedArray <<< "$selectedDeletedImageNumbers"
+        selectedUserImageCount="${#selectedArray[@]}"
 
-    deleteImages
-  fi
+        echo "[$ACCESS_DATE] [DEBUG] 사용자가 선택한 Image 순서 번호 개수(Number of Image Order Numbers Selected by the User): $selectedUserImageCount"
+        echo "[$ACCESS_DATE] [DEBUG] 사용자가 선택한 Image 순서 번호 개수(Number of Image Order Numbers Selected by the User): $selectedUserImageCount" >> "$LOG_FILE" 2>&1
+
+        for ((index=0; index < selectedUserImageCount; index++));
+        do
+          if [[ "$selectedUserImageCount" -gt 0 ]];
+          then
+            targetImageNum="${selectedArray[$index]}"
+
+            echo "[$ACCESS_DATE] [DEBUG] 삭제를 위한 반복 회수 총 $selectedUserImageCount 중 $index 번째 삭제 대상 이미지 이름(Repeated count for deletion Total $selectedUserImageCount $index Destination Image Name): ${deleteTargetImageList[$targetImageNum]}"
+            echo "[$ACCESS_DATE] [DEBUG] 삭제를 위한 반복 회수 총 $selectedUserImageCount 중 $index 번째 삭제 대상 이미지 이름(Repeated count for deletion Total $selectedUserImageCount $index Destination Image Name): ${deleteTargetImageList[$targetImageNum]}" >> "$LOG_FILE" 2>&1
+
+            selectedImages+=("${deleteTargetImageList[$targetImageNum]}")  # 선택한 이미지를 배열에 추가
+
+            echo "[$ACCESS_DATE] [DEBUG] 삭제를 위해 담은 대상 배열 값(Target array values contained for deletion): ${selectedImages[$index]}"
+            echo "[$ACCESS_DATE] [DEBUG] 삭제를 위해 담은 대상 배열 값(Target array values contained for deletion): ${selectedImages[$index]}" >> "$LOG_FILE" 2>&1
+          else
+            echo "[$ACCESS_DATE] [WARNING] 잘못된 문자를 입력했어요.(You entered the wrong character) - $selectedDeletedImageNumbers"
+            echo "[$ACCESS_DATE] [WARNING] 잘못된 문자를 입력했어요.(You entered the wrong character) - $selectedDeletedImageNumbers" >> "$LOG_FILE" 2>&1
+
+            deleteEnvironmentSetting
+          fi
+        done
+
+        deleteImages "${selectedImages[@]}"
+      else
+        echo "[$ACCESS_DATE] [WARNING] 잘못된 문자를 입력했어요.(You entered the wrong character) - $choiceDeleteDetailOption"
+        echo "[$ACCESS_DATE] [WARNING] 잘못된 문자를 입력했어요.(You entered the wrong character) - $choiceDeleteDetailOption" >> "$LOG_FILE" 2>&1
+
+        deleteEnvironmentSetting
+        fi
+      fi
 
   imageDirectorySize=$(du -sh "$IMAGES_DIR")
   downloadImageList=$(ls -al "$IMAGES_DIR")
@@ -268,6 +300,31 @@ deleteImages() {
   echo "[$ACCESS_DATE] [INFO] 삭제 뒤 Image 저장 디렉터리 용량 정보(Image Storage Directory Capacity Information After Delete) (GB) : $imageDirectorySize" >> "$LOG_FILE" 2>&1
   echo "[$ACCESS_DATE] [INFO] 삭제 뒤 내려 받은 Image 목록(List of images downloaded after deletion) : $downloadImageList"
   echo "[$ACCESS_DATE] [INFO] 삭제 뒤 내려 받은 Image 목록(List of images downloaded after deletion) : $downloadImageList" >> "$LOG_FILE" 2>&1
+  checkGlanceImageList
+}
+
+deleteImages() {
+  local deleteTargetImageList=("$@")
+
+  for deleteTargetImage in "${deleteTargetImageList[@]}";
+  do
+    (
+    echo "[$ACCESS_DATE] [DEBUG] 삭제 대상 이미지 이름(Delete target image name): $deleteTargetImage"
+    echo "[$ACCESS_DATE] [DEBUG] 삭제 대상 이미지 이름(Delete target image name): $deleteTargetImage" >> "$LOG_FILE" 2>&1
+
+    rm -rf "$IMAGES_DIR/$deleteTargetImage"
+    deleteCommandResponse=$?
+
+    if [ $deleteCommandResponse -eq 0 ]; then
+      echo "[$ACCESS_DATE] [INFO] $deleteTargetImage 삭제 성공 (Successfully deleted $deleteTargetImage): $deleteCommandResponse"
+      echo "[$ACCESS_DATE] [INFO] $deleteTargetImage 삭제 성공 (Successfully deleted $deleteTargetImage): $deleteCommandResponse" >> "$LOG_FILE" 2>&1
+    else
+      echo "[$ACCESS_DATE] [INFO] $deleteTargetImage 삭제 실패 (Failed to delete $deleteTargetImage): $deleteCommandResponse"
+      echo "[$ACCESS_DATE] [INFO] $deleteTargetImage 삭제 실패 (Failed to delete $deleteTargetImage): $deleteCommandResponse" >> "$LOG_FILE" 2>&1
+    fi
+    )&
+  done
+  wait
 }
 
 checkDeleteCommandResponse() {
@@ -285,12 +342,20 @@ checkDeleteCommandResponse() {
   fi
 }
 
-echo "==== [$ACCESS_DATE] 오픈스택 CentOS 6 이미지 내려받기 스크립트 동작(Open Stack CentOS 6 Image Download Script Behavior) ===="
-echo "@Author: Juny(junyharang8592@gmail.com)"
+checkGlanceImageList() {
+  openstack image list
+  openStackImageList=$?
+
+  echo "[$ACCESS_DATE] [NOTICE] 현재 보유중인 이미지 목록(List of images currently in possession): $openStackImageList"
+  echo "[$ACCESS_DATE] [NOTICE] 현재 보유중인 이미지 목록(List of images currently in possession): $openStackImageList" >> "$LOG_FILE" 2>&1
+}
+
+echo "==== [$ACCESS_DATE] 오픈스택 CentOS 이미지 내려받기 스크립트 동작(Open Stack $DOWNLOAD_OS_NAME Image Download Script Behavior) ===="
+echo "@Author: Juny(junyharang8592@gmail.com) - Tech Blog: https://junyharang.tistory.com/"
 
 licenseNotice
 
-echo "@Author: Juny(junyharang8592@gmail.com)"
-echo "==== [$ACCESS_DATE] 오픈스택 CentOS 6 이미지 내려받기 스크립트 작업 끝(Open Stack CentOS 6 Image Download Script Operation Finished) ===="
-echo "@Author: Juny(junyharang8592@gmail.com)"  >> "$LOG_FILE" 2>&1
-echo "==== [$ACCESS_DATE] 오픈스택 CentOS 6 이미지 내려받기 스크립트 작업 끝(Open Stack CentOS 6 Image Download Script Operation Finished) ===="  >> "$LOG_FILE" 2>&1
+echo "@Author: Juny(junyharang8592@gmail.com) - Tech Blog: https://junyharang.tistory.com/"
+echo "==== [$ACCESS_DATE] 오픈스택 $DOWNLOAD_OS_NAME 이미지 내려받기 스크립트 작업 끝(Open Stack $DOWNLOAD_OS_NAME Image Download Script Operation Finished) ===="
+echo "@Author: Juny(junyharang8592@gmail.com) - Tech Blog: https://junyharang.tistory.com/"  >> "$LOG_FILE" 2>&1
+echo "==== [$ACCESS_DATE] 오픈스택 $DOWNLOAD_OS_NAME 이미지 내려받기 스크립트 작업 끝(Open Stack $DOWNLOAD_OS_NAME Image Download Script Operation Finished) ===="  >> "$LOG_FILE" 2>&1

@@ -9,18 +9,12 @@ LOG_DIR="/var/log/openstack/glance/image/${TODAY}"
 LOG_FILE="${LOG_DIR}/getImages.log"
 IMAGES_DIR="/root/download/openstack/images"
 
-# -------------------------------------------------------
-# SSH Access Web Hook Notification
-# Written by: Juny(junyharang8592@gmail.com)
-# Last updated on: 2023/10/08
-# -------------------------------------------------------
-
 licenseNotice() {
 
   echo "[$ACCESS_DATE] [NOTICE] 해당 Shell Script License에 대한 내용 고지합니다. 숙지하시고, 사용 부탁드립니다."
 
-  echo "[$ACCESS_DATE] [NOTICE] http://opensource.org/licenses/MIT \n"
-  echo "[$ACCESS_DATE] [NOTICE] Copyright (c) 2023 juny(juny8592@gmail.com) v.$VERSION \n"
+  echo "[$ACCESS_DATE] [NOTICE] http://opensource.org/licenses/MIT"
+  echo "[$ACCESS_DATE] [NOTICE] Copyright (c) 2023 juny(juny8592@gmail.com) Tech Blog: https://junyharang.tistory.com/"
   echo "[$ACCESS_DATE] [NOTICE] Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the \"Software\"), to deal
   in the Software without restriction, including without limitation the rights
@@ -41,10 +35,10 @@ licenseNotice() {
 }
 
 checkWho() {
-  echo "[$NOW] [INFO] 쉘 스크립트 기동 사용자가 root 인지 확인합니다.(Verify that the shell script startup user is root.)"
+  echo "[$ACCESS_DATE] [INFO] 쉘 스크립트 기동 사용자가 root 인지 확인합니다.(Verify that the shell script startup user is root.)"
 
   if [[ $EUID -ne 0 ]]; then
-      echo "[$NOW] [ERROR] 해당 쉘 스크립트는 root로 실행되어야 사용할 수 있어요.(The shell script must run as root before it can be used.)"
+      echo "[$ACCESS_DATE] [ERROR] 해당 쉘 스크립트는 root로 실행되어야 사용할 수 있어요.(The shell script must run as root before it can be used.)"
       exit 1
 
   else
@@ -60,7 +54,7 @@ checkLogRelevant() {
   if [ -d "$LOG_DIR" ];
   then
     echo "==== [$ACCESS_DATE] 오픈스택 이미지 내려받기 스크립트 동작(Open Stack Image Download Script Behavior) ===="  >> "$LOG_FILE" 2>&1
-    echo "@Author: Juny(junyharang8592@gmail.com)"  >> "$LOG_FILE" 2>&1
+    echo "@Author: Juny(junyharang8592@gmail.com) - Tech Blog: https://junyharang.tistory.com/"  >> "$LOG_FILE" 2>&1
 
     echo "[$ACCESS_DATE] [INFO] Log 저장을 위한 Directory가 존재 합니다.(Directory exists for saving the log.)"
     echo "[$ACCESS_DATE] [INFO] Log 저장을 위한 Directory가 존재 합니다.(Directory exists for saving the log.)" >> "$LOG_FILE" 2>&1
@@ -75,7 +69,7 @@ checkLogRelevant() {
       exit 1
      else
        echo "==== [$ACCESS_DATE] 오픈스택 이미지 내려받기 스크립트 동작(Open Stack Image Download Script Behavior) ===="  >> "$LOG_FILE" 2>&1
-       echo "@Author: Juny(junyharang8592@gmail.com)"  >> "$LOG_FILE" 2>&1
+       echo "@Author: Juny(junyharang8592@gmail.com) - Tech Blog: https://junyharang.tistory.com/"  >> "$LOG_FILE" 2>&1
 
        echo "[$ACCESS_DATE] [INFO] Log 저장을 위한 Directory가 존재 하지 않아 생성 하였습니다.(Created because Directory for Log Storage does not exist.)"
        echo "[$ACCESS_DATE] [INFO] Log 저장을 위한 Directory가 존재 하지 않아 생성 하였습니다.(Created because Directory for Log Storage does not exist.)" >> "$LOG_FILE" 2>&1
@@ -268,7 +262,10 @@ imagesDirectoryCheck() {
 }
 
 selectedByOptionOperationSystem() {
-  echo "어떤 종류의 Image를 만들고 싶으세요? 숫자만 입력할 수 있어요.(What kind of image do you want to make? You can only enter numbers.)"
+
+  checkGlanceImageList
+
+  echo "[$ACCESS_DATE] [INFO] 어떤 종류의 Image를 만들고 싶으세요? 숫자만 입력할 수 있어요.(What kind of image do you want to make? You can only enter numbers.)"
 
   select operationSystem in "All Images" "CentOS" "CirrOS(test)" "Debian" "Fedora" "Microsoft Windows" "Ubuntu" "openSUSE and SUSE Linux Enterprise Server" "FreeBSD, OpenBSD, and NetBSD" "Arch Linux" "종료(exit)";
   do
@@ -281,7 +278,8 @@ selectedByOptionOperationSystem() {
      #break;;
     "2")
       selectedByCentOsVersion
-      break;;
+      selectedByOptionOperationSystem;;
+      #break
     "3")
       #selectedByCirrOsVersion
       echo "[$ACCESS_DATE] [NOTICE] 현재 준비 중이에요. 빠르게 업데이트 해 드릴게요! 기대해 주세요. 😊(I'm preparing right now. I'll update you quickly! Please look forward to it. 😊)"
@@ -296,7 +294,8 @@ selectedByOptionOperationSystem() {
       #break;;
     "5")
       selectedByFedoraVersion
-      break;;
+      selectedByOptionOperationSystem;;
+      #break;;
     "6")
       #selectedByWindowsVersion
       echo "[$ACCESS_DATE] [NOTICE] 현재 준비 중이에요. 빠르게 업데이트 해 드릴게요! 기대해 주세요. 😊(I'm preparing right now. I'll update you quickly! Please look forward to it. 😊)"
@@ -418,12 +417,20 @@ selectedByWindowsVersion() {
   fi
 }
 
-echo "==== [$ACCESS_DATE] 오픈스택 이미지 내려받기 스크립트 동작(Open Stack Image Download Script Behavior) ===="
-echo "@Author: Juny(junyharang8592@gmail.com)"
+checkGlanceImageList() {
+  openstack image list
+  openStackImageList=$?
+
+  echo "[$ACCESS_DATE] [NOTICE] 현재 보유중인 이미지 목록(List of images currently in possession): $openStackImageList"
+  echo "[$ACCESS_DATE] [NOTICE] 현재 보유중인 이미지 목록(List of images currently in possession): $openStackImageList" >> "$LOG_FILE" 2>&1
+}
+
+echo "==== [$ACCESS_DATE] 오픈스택 CentOS 이미지 내려받기 스크립트 동작(Open Stack Image Download Script Behavior) ===="
+echo "@Author: Juny(junyharang8592@gmail.com) - Tech Blog: https://junyharang.tistory.com/"
 
 licenseNotice
 
-echo "@Author: Juny(junyharang8592@gmail.com)"
-echo "==== [$ACCESS_DATE] 오픈스택 이미지 내려받기 스크립트 작업 끝(Finished downloading open-stack image script operation) ===="
-echo "@Author: Juny(junyharang8592@gmail.com)"  >> "$LOG_FILE" 2>&1
-echo "==== [$ACCESS_DATE] 오픈스택 이미지 내려받기 스크립트 작업 끝(Finished downloading open-stack image script operation) ===="  >> "$LOG_FILE" 2>&1
+echo "@Author: Juny(junyharang8592@gmail.com) - Tech Blog: https://junyharang.tistory.com/"
+echo "==== [$ACCESS_DATE] 오픈스택 이미지 내려받기 스크립트 작업 끝(Open Stack Image Download Script Operation Finished) ===="
+echo "@Author: Juny(junyharang8592@gmail.com) - Tech Blog: https://junyharang.tistory.com/"  >> "$LOG_FILE" 2>&1
+echo "==== [$ACCESS_DATE] 오픈스택 이미지 내려받기 스크립트 작업 끝(Open Stack Image Download Script Operation Finished) ===="  >> "$LOG_FILE" 2>&1
