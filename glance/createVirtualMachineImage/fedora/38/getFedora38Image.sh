@@ -7,19 +7,14 @@ TODAY=$(date +"%Y-%m-%d")
 LOG_DIR="/var/log/openstack/glance/image/fedora38/${TODAY}"
 LOG_FILE="${LOG_DIR}/createOpenStackImages.log"
 IMAGES_DIR="/root/download/openstack/images"
-
-# -------------------------------------------------------
-# SSH Access Web Hook Notification
-# Written by: Juny(junyharang8592@gmail.com)
-# Last updated on: 2023/10/08
-# -------------------------------------------------------
+DOWNLOAD_OS_NAME="Fedora 38"
 
 licenseNotice() {
 
   echo "[$ACCESS_DATE] [NOTICE] 해당 Shell Script License에 대한 내용 고지합니다. 숙지하시고, 사용 부탁드립니다."
 
   echo "[$ACCESS_DATE] [NOTICE] http://opensource.org/licenses/MIT"
-  echo "[$ACCESS_DATE] [NOTICE] Copyright (c) 2023 juny(juny8592@gmail.com)"
+  echo "[$ACCESS_DATE] [NOTICE] Copyright (c) 2023 juny(juny8592@gmail.com) Tech Blog: https://junyharang.tistory.com/"
   echo "[$ACCESS_DATE] [NOTICE] Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the \"Software\"), to deal
   in the Software without restriction, including without limitation the rights
@@ -44,8 +39,8 @@ checkLogRelevant() {
 
   if [ -d "$LOG_DIR" ];
   then
-    echo "==== [$ACCESS_DATE] 오픈스택 Fedora 이미지 내려받기 스크립트 동작(Open Stack Fedora Image Download Script Behavior) ===="  >> "$LOG_FILE" 2>&1
-    echo "@Author: Juny(junyharang8592@gmail.com)"  >> "$LOG_FILE" 2>&1
+    echo "==== [$ACCESS_DATE] 오픈스택 $DOWNLOAD_OS_NAME 이미지 내려받기 스크립트 동작(Open Stack $DOWNLOAD_OS_NAME Image Download Script Behavior) ===="  >> "$LOG_FILE" 2>&1
+    echo "@Author: Juny(junyharang8592@gmail.com) - Tech Blog: https://junyharang.tistory.com/"  >> "$LOG_FILE" 2>&1
 
     echo "[$ACCESS_DATE] [INFO] Log 저장을 위한 Directory가 존재 합니다.(Directory exists for saving the log.)"
     echo "[$ACCESS_DATE] [INFO] Log 저장을 위한 Directory가 존재 합니다.(Directory exists for saving the log.)" >> "$LOG_FILE" 2>&1
@@ -59,8 +54,8 @@ checkLogRelevant() {
 
       exit 1
      else
-       echo "==== [$ACCESS_DATE] 오픈스택 Fedora 이미지 내려받기 스크립트 동작(Open Stack Fedora Image Download Script Behavior) ===="  >> "$LOG_FILE" 2>&1
-       echo "@Author: Juny(junyharang8592@gmail.com)"  >> "$LOG_FILE" 2>&1
+       echo "==== [$ACCESS_DATE] 오픈스택 $DOWNLOAD_OS_NAME 이미지 내려받기 스크립트 동작(Open Stack $DOWNLOAD_OS_NAME Image Download Script Behavior) ===="  >> "$LOG_FILE" 2>&1
+       echo "@Author: Juny(junyharang8592@gmail.com) - Tech Blog: https://junyharang.tistory.com/"  >> "$LOG_FILE" 2>&1
 
        echo "[$ACCESS_DATE] [INFO] Log 저장을 위한 Directory가 존재 하지 않아 생성 하였습니다.(Created because Directory for Log Storage does not exist.)"
        echo "[$ACCESS_DATE] [INFO] Log 저장을 위한 Directory가 존재 하지 않아 생성 하였습니다.(Created because Directory for Log Storage does not exist.)" >> "$LOG_FILE" 2>&1
@@ -170,6 +165,8 @@ deleteImages() {
   echo "[$ACCESS_DATE] [INFO] 삭제 뒤 Image 저장 디렉터리 용량 정보(Image Storage Directory Capacity Information After Delete) (GB) : $imageDirectorySize" >> "$LOG_FILE" 2>&1
   echo "[$ACCESS_DATE] [INFO] 삭제 뒤 내려 받은 Image 목록(List of images downloaded after deletion) : $downloadImageList"
   echo "[$ACCESS_DATE] [INFO] 삭제 뒤 내려 받은 Image 목록(List of images downloaded after deletion) : $downloadImageList" >> "$LOG_FILE" 2>&1
+
+  checkGlanceImageList
 }
 
 checkDeleteCommandResponse() {
@@ -187,12 +184,20 @@ checkDeleteCommandResponse() {
   fi
 }
 
-echo "==== [$ACCESS_DATE] 오픈스택 Fedora 이미지 내려받기 스크립트 동작(Open Stack Fedora Image Download Script Behavior) ===="
-echo "@Author: Juny(junyharang8592@gmail.com)"
+checkGlanceImageList() {
+  openstack image list
+  openStackImageList=$?
+
+  echo "[$ACCESS_DATE] [NOTICE] 현재 보유중인 이미지 목록(List of images currently in possession): $openStackImageList"
+  echo "[$ACCESS_DATE] [NOTICE] 현재 보유중인 이미지 목록(List of images currently in possession): $openStackImageList" >> "$LOG_FILE" 2>&1
+}
+
+echo "==== [$ACCESS_DATE] 오픈스택 CentOS 이미지 내려받기 스크립트 동작(Open Stack $DOWNLOAD_OS_NAME Image Download Script Behavior) ===="
+echo "@Author: Juny(junyharang8592@gmail.com) - Tech Blog: https://junyharang.tistory.com/"
 
 licenseNotice
 
-echo "@Author: Juny(junyharang8592@gmail.com)"
-echo "==== [$ACCESS_DATE] 오픈스택 Fedora 이미지 내려받기 스크립트 작업 끝(Open Stack Fedora Image Download Script Operation Finished) ===="
-echo "@Author: Juny(junyharang8592@gmail.com)"  >> "$LOG_FILE" 2>&1
-echo "==== [$ACCESS_DATE] 오픈스택 Fedora 이미지 내려받기 스크립트 작업 끝(Open Stack Fedora Image Download Script Operation Finished) ===="  >> "$LOG_FILE" 2>&1
+echo "@Author: Juny(junyharang8592@gmail.com) - Tech Blog: https://junyharang.tistory.com/"
+echo "==== [$ACCESS_DATE] 오픈스택 $DOWNLOAD_OS_NAME 이미지 내려받기 스크립트 작업 끝(Open Stack $DOWNLOAD_OS_NAME Image Download Script Operation Finished) ===="
+echo "@Author: Juny(junyharang8592@gmail.com) - Tech Blog: https://junyharang.tistory.com/"  >> "$LOG_FILE" 2>&1
+echo "==== [$ACCESS_DATE] 오픈스택 $DOWNLOAD_OS_NAME 이미지 내려받기 스크립트 작업 끝(Open Stack $DOWNLOAD_OS_NAME Image Download Script Operation Finished) ===="  >> "$LOG_FILE" 2>&1
