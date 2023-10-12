@@ -1,9 +1,17 @@
 [한국어](https://github.com/JunyHarang-Open-Source-project/openstack-getGlanceImage/blob/master/README.md) | [For English](https://github.com/JunyHarang-Open-Source-project/openstack-getGlanceImage/blob/master/README.en.md)
 
+[![김태용의 리눅스 쉘 스크립트 프로그래밍 입문, 제이펍](https://shopping-phinf.pstatic.net/main_3243614/32436142895.20221230074729.jpg?type=w300)](https://link.coupang.com/a/bb3Kah)<br>
+"이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다."
+
 # OpenStack Glance Image Download Program
 
 ## 🚀 무엇을 할 수 있나요?
 * OpenStack Controller Node에서 Glance에 가상 이미지를 보다 편리하게 받을 수 있어요.
+
+## 🚀 Release 1.2.1 버전 내려 받기 가능 목록
+* CentOS 6, 7, 8, 8Steam, 9Stream
+* Fedora37
+* Ubuntu Unminimal, minimal
 
 ## 🚀 어떻게 사용할 수 있나요?
  ### 🔽 쉘 스크립트를 모두 내려 받아 주세요!
@@ -21,10 +29,10 @@
 ![img_1.png](readme/images/img_1.png)
 <br><br>
 
- ### 🔽 createOpenStackImages.sh를 실행 시켜 주세요.
+ ### 🔽 managementOpenStackImages.sh를 실행 시켜 주세요.
 
   ```bash
-    your/path/openstack-getGlanceImage/glance/createVirtualMachineImage/createOpenStackImages.sh
+    your/path/openstack-getGlanceImage/glance/createVirtualMachineImage/managementOpenStackImages.sh
   ```
 <br><br>
 ### 🔽 내려 받기 원하는 OS 종류를 선택해 주세요.
@@ -75,16 +83,26 @@
 ![img_3.png](readme/images/img_42.png)
 - 전체 삭제를 선택하면 위와 같이 모든 이미지를 한번에 지울 수 있어요.<br><br>
 
-#### 📦 마지막으로
-![img.png](readme/images/img_43.png)
-![img_1.png](readme/images/img_44.png)
-- 작업이 끝나고, 다시 이 곳으로 돌아왔을 때, 종료를 하고 싶다면 11번을 입력해 주면 돼요.
-<br><br>
+#### 📦 내려 받기 대상 사이트 확인
+![img.png](readme/images/img_45.png)
+![img_1.png](readme/images/img_46.png)
+![img_2.png](readme/images/img_47.png)
+- 위와 같이 1번을 누르고, 엔터를 누르면 내려 받을 OS 사이트의 정보를 확인할 수 있어요.<br><br>
+
+![img_3.png](readme/images/img_48.png)
+- 1번을 누르면 내려 받기 가능한 OS의 내려 받기 사이트의 정보를 모두 확인할 수 있어요.<br><br>
+
+![img_4.png](readme/images/img_49.png)
+![img_5.png](readme/images/img_50.png)
+![img_6.png](readme/images/img_51.png)
+- 이렇게 확인할 수 있어요.
 
 ### 🔽 Realese Note
 https://github.com/JunyHarang-Open-Source-project/openstack-getGlanceImage/releases
 
-
 ### 🔽 사용 중 문의는 어디로 남기면 되나요?
   - **junyharang8592@gmail.com 으로 메일 부탁드릴게요. 🤭**
   - **주니하랑 기술 Blog: https://junyharang.tistory.com/**
+<br><br>
+[![Openstack Cloud Computing Cookbook - Third Edition Paperback](https://image.yes24.com/momo/TopCate2516/MidCate010/251596375.jpg)](https://link.coupang.com/a/bb3Kah)<br>
+"이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다."
