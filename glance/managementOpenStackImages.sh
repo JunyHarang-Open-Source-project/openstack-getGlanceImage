@@ -526,7 +526,7 @@ getAllUbuntuUnMinimal() {
 selectedByMinimalVersion() {
   echo "어떤 Minimal Version Image를 만들고 싶으세요? 번호를 입력해 주세요.(What Minimal version image do you want to make? Please enter your number.)"
 
-  select version in "All Images" "ubuntuMinimal16.04LTS" "ubuntuMinimal18.04LTS" "ubuntuMinimal18.10" "ubuntuMinimal19.04" "ubuntuMinimal19.10" "ubuntuMinimal20.04" "ubuntuMinimal20.10" "ubuntuMinimal21.04" "ubuntuMinimal21.10" "ubuntuMinimal22.04LTS" "ubuntuMinimal22.10" "ubuntuMinimal23.04" "ubuntuMinimal23.10" "뒤로 가기 (Back)" "종료(exit)"; do
+  select version in "All Images" "ubuntuMinimal18.04LTS" "ubuntuMinimal18.10" "ubuntuMinimal19.04" "ubuntuMinimal19.10" "ubuntuMinimal20.04" "ubuntuMinimal20.10" "ubuntuMinimal21.04" "ubuntuMinimal21.10" "ubuntuMinimal22.04LTS" "ubuntuMinimal22.10" "ubuntuMinimal23.04" "ubuntuMinimal23.10" "뒤로 가기 (Back)" "종료(exit)"; do
     case $REPLY in
     "1")
       getAllUbuntuMinimal;;
