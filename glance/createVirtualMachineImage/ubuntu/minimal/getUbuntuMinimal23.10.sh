@@ -254,7 +254,7 @@ createdOpenStackImage() {
   echo "[$ACCESS_DATE] [INFO] 내려 받은 이미지 $imageName 에 대해 OpenStack Image를 만들게요. (create an OpenStack image for the downloaded $imageName.)"
   echo "[$ACCESS_DATE] [INFO] 내려 받은 이미지 $imageName 에 대해 OpenStack Image를 만들게요. (create an OpenStack image for the downloaded $imageName.)" >> "$LOG_FILE" 2>&1
 
-  openstack image create "$DOWNLOAD_OS_NAME-$imageName" --disk-format qcow2 --file "$IMAGES_DIR/$imageExtensionName" --container-format bare --public
+  openstack image create "$imageName" --disk-format qcow2 --file "$IMAGES_DIR/$imageExtensionName" --container-format bare --public
 
   createdImageByOpenstackCommandStatus=$?
 
