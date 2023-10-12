@@ -344,12 +344,11 @@ checkDeleteCommandResponse() {
 
 checkGlanceImageList() {
   openstack image list
-  openStackImageList=$?
+  openStackImageListCount=$(openstack image list | grep -v '+' | grep -v 'ID' | grep -v 'Name' | grep -v 'Status' | wc -l)
 
-  echo "[$ACCESS_DATE] [NOTICE] 현재 보유중인 이미지 목록(List of images currently in possession): $openStackImageList"
-  echo "[$ACCESS_DATE] [NOTICE] 현재 보유중인 이미지 목록(List of images currently in possession): $openStackImageList" >> "$LOG_FILE" 2>&1
+  echo "[$ACCESS_DATE] [NOTICE] 현재 보유중인 이미지 목록(List of images currently in possession): $openStackImageListCount"
+  echo "[$ACCESS_DATE] [NOTICE] 현재 보유중인 이미지 목록(List of images currently in possession): $openStackImageListCount" >> "$LOG_FILE" 2>&1
 }
-
 echo "==== [$ACCESS_DATE] 오픈스택 CentOS 이미지 내려받기 스크립트 동작(Open Stack $DOWNLOAD_OS_NAME Image Download Script Behavior) ===="
 echo "@Author: Juny(junyharang8592@gmail.com) - Tech Blog: https://junyharang.tistory.com/"
 

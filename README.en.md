@@ -8,6 +8,11 @@
 ## 🚀 what's this for
 * You can get virtual images to Glance more conveniently in the OpenStack Controller Node.
 
+## 🚀 Release 1.2.1 Version Downloadable List
+* CentOS 6, 7, 8, 8Steam, 9Stream
+* Fedora37
+* Ubuntu Unminimal, minimal
+
 ## 🚀 How to Use
 ### 🔽 Please download all shell scripts!
   ```bash
@@ -16,17 +21,17 @@
 ![img.png](readme/images/img.png)
 <br><br>
 
-### 🔽 Please grant permission to run OpenStack/glance/createOpenStackImages.sh
+### 🔽 Please grant permission to run OpenStack/glance/managementOpenStackImages.sh
    ```bash
-    chmod +x your/path/openstack-getGlanceImage/glance/createVirtualMachineImage/createOpenStackImages.sh
+    chmod +x your/path/openstack-getGlanceImage/glance/createVirtualMachineImage/managementOpenStackImages.sh
    ```
 
 ![img_1.png](readme/images/img_1.png)
 <br><br>
 
-### 🔽 Please run createOpenStackImages.sh .
+### 🔽 Please run managementOpenStackImages.sh
   ```bash
-    your/path/openstack-getGlanceImage/glance/createVirtualMachineImage/createOpenStackImages.sh
+    your/path/openstack-getGlanceImage/glance/createVirtualMachineImage/managementOpenStackImages.sh
   ```
 <br><br>
 ### 🔽 Please select the OS type you want to download.
@@ -77,6 +82,20 @@
   ![img_3.png](readme/images/img_42.png)
 - If you select Delete All, you can erase all images at once as above.<br><br>
 
+#### 📦 Check Download Site
+![img.png](readme/images/img_45.png)
+![img_1.png](readme/images/img_46.png)
+![img_2.png](readme/images/img_47.png)
+- You can check the information of the OS site to be downloaded by pressing 1 and enter as shown above.<br><br>
+
+![img_3.png](readme/images/img_48.png)
+- If you press 1, you can check all the information on the download site of the OS that can be downloaded.<br><br>
+
+![img_4.png](readme/images/img_49.png)
+![img_5.png](readme/images/img_50.png)
+![img_6.png](readme/images/img_51.png)
+- You can check it out like this.
+
 #### 📦 Lastly
 ![img.png](readme/images/img_43.png)
 ![img_1.png](readme/images/img_44.png)
@@ -88,7 +107,6 @@ https://github.com/JunyHarang-Open-Source-project/openstack-getGlanceImage/relea
 
 ### 🔽 Where should I leave the inquiry while using it?
    - **Please email me to junyharang8592@gmail.com. 🤭**
-   - **Juny Harang Tech Blog: https://junyharang.tistory.com/** 
 <br><br>
 [![Openstack Cloud Computing Cookbook - Third Edition Paperback](https://image.yes24.com/momo/TopCate2516/MidCate010/251596375.jpg)](https://link.coupang.com/a/bb3Kah)<br>
 "This posting is part of Coupang Partners' activities and receives a certain amount of commission accordingly."
