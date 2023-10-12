@@ -107,7 +107,6 @@ https://github.com/JunyHarang-Open-Source-project/openstack-getGlanceImage/relea
 
 ### 🔽 Where should I leave the inquiry while using it?
    - **Please email me to junyharang8592@gmail.com. 🤭**
-   - **Juny Harang Tech Blog: https://junyharang.tistory.com/**
 <br><br>
 [![Openstack Cloud Computing Cookbook - Third Edition Paperback](https://image.yes24.com/momo/TopCate2516/MidCate010/251596375.jpg)](https://link.coupang.com/a/bb3Kah)<br>
 "This posting is part of Coupang Partners' activities and receives a certain amount of commission accordingly."
