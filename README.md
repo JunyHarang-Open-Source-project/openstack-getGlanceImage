@@ -21,9 +21,9 @@
 ![img.png](readme/images/img.png)
 <br><br>
 
- ### 🔽 OpenStack/glaance/createOpenStackImages.sh에 실행 권한을 주세요.
+ ### 🔽 OpenStack/glaance/managementOpenStackImages.sh에 실행 권한을 주세요.
    ```bash
-    chmod +x your/path/openstack-getGlanceImage/glance/createVirtualMachineImage/createOpenStackImages.sh
+    chmod +x your/path/openstack-getGlanceImage/glance/createVirtualMachineImage/managementOpenStackImages.sh
    ```
 
 ![img_1.png](readme/images/img_1.png)

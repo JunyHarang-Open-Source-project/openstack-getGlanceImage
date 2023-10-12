@@ -21,17 +21,17 @@
 ![img.png](readme/images/img.png)
 <br><br>
 
-### 🔽 Please grant permission to run OpenStack/glance/createOpenStackImages.sh
+### 🔽 Please grant permission to run OpenStack/glance/managementOpenStackImages.sh
    ```bash
-    chmod +x your/path/openstack-getGlanceImage/glance/createVirtualMachineImage/createOpenStackImages.sh
+    chmod +x your/path/openstack-getGlanceImage/glance/createVirtualMachineImage/managementOpenStackImages.sh
    ```
 
 ![img_1.png](readme/images/img_1.png)
 <br><br>
 
-### 🔽 Please run createOpenStackImages.sh .
+### 🔽 Please run managementOpenStackImages.sh
   ```bash
-    your/path/openstack-getGlanceImage/glance/createVirtualMachineImage/createOpenStackImages.sh
+    your/path/openstack-getGlanceImage/glance/createVirtualMachineImage/managementOpenStackImages.sh
   ```
 <br><br>
 ### 🔽 Please select the OS type you want to download.
