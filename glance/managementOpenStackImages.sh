@@ -8,6 +8,7 @@ SCRIPT_VERSION="1.0.0"
 LOG_DIR="/var/log/openstack/glance/image/${TODAY}"
 LOG_FILE="${LOG_DIR}/getImages.log"
 IMAGES_DIR="/root/download/openstack/images"
+ROOT_PATH=$(pwd)
 
 licenseNotice() {
 
@@ -184,7 +185,7 @@ cat <<EOF > /root/bootstrap-keystone1
 EOF
 
   chmod +x /root/bootstrap-keystone
-  /root/bootstrap-keystone
+  source /root/bootstrap-keystone
 
   if [ $? -eq 0  ];
   then
@@ -220,7 +221,7 @@ export OS_VOLUME_API_VERSION=3
 EOF
 
   chmod +x /root/keystonerc
-  /root/keystonerc
+  source /root/keystonerc
 
   if [ $? -eq 0  ];
   then
@@ -258,7 +259,29 @@ imagesDirectoryCheck() {
      fi
   fi
 
-  selectedByOptionOperationSystem
+  choiceWork
+}
+
+choiceWork() {
+
+  echo "[$ACCESS_DATE] [INFO] 어떤 작업을 진행해 볼까요? 숫자만 입력할 수 있어요.(What kind of work should we do? You can only enter numbers.)"
+  echo "[$ACCESS_DATE] [INFO] 어떤 작업을 진행해 볼까요? 숫자만 입력할 수 있어요.(What kind of work should we do? You can only enter numbers.)" >> "$LOG_FILE" 2>&1
+
+  select operationSystem in "이미지 저장소 정보 조회(Query image store information)" "이미지 내려 받기(Downloading an Image)" "종료(exit)";
+    do
+      case $REPLY in
+      "1")
+        chmod +x "$ROOT_PATH"/check/getDownloadSiteList.sh
+        "$ROOT_PATH"/check/getDownloadSiteList.sh
+        chmod +x "$ROOT_PATH"/check/getDownloadSiteList.sh;;
+      "2")
+        selectedByOptionOperationSystem;;
+      "3")
+        break;;
+      *)
+        echo "올바른 선택이 아닙니다. 다시 선택해주세요.(This is not the correct choice. Please select again by entering only numbers.)"
+      esac
+    done
 }
 
 selectedByOptionOperationSystem() {
@@ -266,6 +289,7 @@ selectedByOptionOperationSystem() {
   checkGlanceImageList
 
   echo "[$ACCESS_DATE] [INFO] 어떤 종류의 Image를 만들고 싶으세요? 숫자만 입력할 수 있어요.(What kind of image do you want to make? You can only enter numbers.)"
+  echo "[$ACCESS_DATE] [INFO] 어떤 종류의 Image를 만들고 싶으세요? 숫자만 입력할 수 있어요.(What kind of image do you want to make? You can only enter numbers.)" >> "$LOG_FILE" 2>&1
 
   select operationSystem in "All Images" "CentOS" "CirrOS(test)" "Debian" "Fedora" "Microsoft Windows" "Ubuntu" "openSUSE and SUSE Linux Enterprise Server" "FreeBSD, OpenBSD, and NetBSD" "Arch Linux" "종료(exit)";
   do
