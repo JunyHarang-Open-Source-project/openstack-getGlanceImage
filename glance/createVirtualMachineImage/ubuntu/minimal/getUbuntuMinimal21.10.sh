@@ -5,12 +5,12 @@ set -e
 ACCESS_DATE=$(date +"%Y-%m-%d %T")
 TODAY=$(date +"%Y-%m-%d")
 ROOT_PATH=$(pwd)
-LOG_DIR="/var/log/openstack/glance/image/Ubuntu-8.04/${TODAY}"
+LOG_DIR="/var/log/openstack/glance/image/Ubuntu/${TODAY}"
 LOG_FILE="${LOG_DIR}/createOpenStackImages.log"
 IMAGES_DIR="/root/download/openstack/images"
-BASE_DOWNLOAD_URL="https://cloud-images.ubuntu.com/releases/"
-DOWNLOAD_OS_NAME="ubuntu8.04"
+DOWNLOAD_OS_NAME="ubuntuMinimal21.10"
 DOWNLOAD_OS_SITE_LIST_INI_FILE="$ROOT_PATH/check/downloadSiteList.ini"
+DOWNLOAD_SITE_URL=""
 
 declare -gA ubuntuSites
 
@@ -68,9 +68,12 @@ checkLogRelevant() {
   fi
 
   getImageStorageInfo
+
+  getOsList
 }
 
 getImageStorageInfo() {
+  echo "[$ACCESS_DATE] [DEBUG] 등록된 이미지 저장소 정보를 가져올게요. (I'll get the registered image store information.)"
   echo "[$ACCESS_DATE] [DEBUG] 등록된 이미지 저장소 정보를 가져올게요. (I'll get the registered image store information.)" >> "$LOG_FILE" 2>&1
 
   # downloadSiteList.ini 파일을 읽고 구문 분석
@@ -81,28 +84,33 @@ getImageStorageInfo() {
     value=${value%%*( )}
     value=${value##*( )}
 
-    if [[ $key == "ubuntu8"* ]]; then
+    if [[ $key == "$DOWNLOAD_OS_NAME" ]]; then
       ubuntuSites["$key"]="$value"
     else
       continue
     fi
 
   done < "$DOWNLOAD_OS_SITE_LIST_INI_FILE"
-
-  getOsList
 }
 
 getOsList() {
   resultArray=()
 
-  for imageDownloadSiteName in "${!ubuntuSites[@]}"; do
+  for imageDownloadTargetName in "${!ubuntuSites[@]}"; do
 
-    echo "[$ACCESS_DATE] [DEBUG] imageDownloadSiteName 변수값: $imageDownloadSiteName"
+    echo "[$ACCESS_DATE] [DEBUG] imageDownloadSiteName 변수값: $imageDownloadTargetName"
 
-    if [[ "$imageDownloadSiteName" == "$DOWNLOAD_OS_NAME" || "$imageDownloadSiteName" == "ubuntu8.04.3" || "$imageDownloadSiteName" == "ubuntu8.04.4" ]]; then
-      echo "[$ACCESS_DATE] [INFO] $DOWNLOAD_OS_NAME 이미지를 내려 받을게요.(download the image for $DOWNLOAD_OS_NAME.) 내려 받는 곳(From): ${ubuntuSites[$imageDownloadSiteName]}" >> "$LOG_FILE" 2>&1
-      getPageContent=$(wget -q -O - "$BASE_DOWNLOAD_URL/${ubuntuSites[$imageDownloadSiteName]}/release")
-      getCentosImageList=$(echo "$getPageContent" | grep -oE 'href=".*-server-cloudimg-amd64.img"' | sed 's/href="//' | sed 's/"//')
+    if [[ "$imageDownloadTargetName" == "$DOWNLOAD_OS_NAME" ]]; then
+      echo "[$ACCESS_DATE] [INFO] $DOWNLOAD_OS_NAME 이미지를 내려 받을게요.(download the image for $DOWNLOAD_OS_NAME.) 내려 받는 곳(From): ${ubuntuSites[$imageDownloadTargetName]}"
+      echo "[$ACCESS_DATE] [INFO] $DOWNLOAD_OS_NAME 이미지를 내려 받을게요.(download the image for $DOWNLOAD_OS_NAME.) 내려 받는 곳(From): ${ubuntuSites[$imageDownloadTargetName]}" >> "$LOG_FILE" 2>&1
+      getPageContent=$(wget -q -O - "${ubuntuSites[$imageDownloadTargetName]}")
+
+      if [ "$getPageContent" -ne 0 ]; then
+        echo "[$ACCESS_DATE] [DEBUG] WGET 명령 결과 확인: $getPageContent"
+        echo "[$ACCESS_DATE] [DEBUG] WGET 명령 결과 확인: $getPageContent" >> "$LOG_FILE" 2>&1
+      fi
+
+      getCentosImageList=$(echo "$getPageContent" | grep -oE 'href=".*-minimal-cloudimg-amd64.img"' | sed 's/href="//' | sed 's/"//')
     fi
   done
 
@@ -111,7 +119,17 @@ getOsList() {
     resultArray+=("$line")
   done <<< "$getCentosImageList"
 
-  numberImages "${resultArray[@]}"
+  imageListLength=${#resultArray[@]}
+
+  echo "[$ACCESS_DATE] [DEBUG] imageListLength 변수값: $imageListLength"
+
+  if [ "$imageListLength" -gt 1 ] && [ "${#ubuntuSites[@]}" -ge 1 ]; then
+    numberImages "${resultArray[@]}"
+  else
+    DOWNLOAD_SITE_URL="${ubuntuSites[$imageDownloadTargetName]}"
+    downloadImage "${resultArray[0]}"
+    deleteEnvironmentSetting "${resultArray[0]}"
+  fi
 }
 
 numberImages() {
@@ -153,7 +171,7 @@ choiceImages() {
   echo "[$ACCESS_DATE] [DEBUG] 사용자가 선택한 내려 받을 Image 개수(Number of download images selected by the user): $choiceImagesNumber"
   echo "[$ACCESS_DATE] [DEBUG] 사용자가 선택한 내려 받을 Image 개수(Number of download images selected by the user): $choiceImagesNumber" >> "$LOG_FILE" 2>&1
 
-  read -p "내려 받을 이미지 순서 번호를 선택 해주세요. (여러 개 선택 가능, 스페이스로 구분) Please select the image order number to download. (Multiple choices available, separated by space): " selectedNumbers
+  read -r -p "내려 받을 이미지 순서 번호를 선택 해주세요. (여러 개 선택 가능, 스페이스로 구분) Please select the image order number to download. (Multiple choices available, separated by space): " selectedNumbers
 
   IFS=' ' read -ra selectedArray <<< "$selectedNumbers"
   selectedUserImageCount="${#selectedArray[@]}"
@@ -174,8 +192,8 @@ choiceImages() {
     fi
   done
 
-  for image in "${selectedImages[@]}";
-  do
+  for image in "${selectedImages[@]}"; do
+    DOWNLOAD_SITE_URL="${ubuntuSites[$image]}"
     (
     echo "[$ACCESS_DATE] [INFO] 내려 받을 Image 이름: $image(Image name to download: $image)"
     echo "[$ACCESS_DATE] [INFO] 내려 받을 Image 이름: $image(Image name to download: $image)" >> "$LOG_FILE" 2>&1
@@ -190,8 +208,8 @@ choiceImages() {
 choiceAllImages() {
   local imageList=("$@")
 
-  for image in "${imageList[@]}";
-  do
+  for image in "${imageList[@]}"; do
+    DOWNLOAD_SITE_URL="${ubuntuSites[$image]}"
     (
     echo "[$ACCESS_DATE] [INFO] 내려 받을 Image 이름: $image(Image name to download: $image)"
     echo "[$ACCESS_DATE] [INFO] 내려 받을 Image 이름: $image(Image name to download: $image)" >> "$LOG_FILE" 2>&1
@@ -205,7 +223,7 @@ choiceAllImages() {
 
 downloadImage() {
   local targetDownloadImage="$1"
-  local targetDownloadImageUrl="$GET_CENT_OS_URL$targetDownloadImage"
+  local targetDownloadImageUrl="$DOWNLOAD_SITE_URL$targetDownloadImage"
 
   echo "[$ACCESS_DATE] [INFO] $targetDownloadImage Image 내려 받기를 진행할게요. 저장 디렉터리: $IMAGES_DIR (proceed with downloading the $targetDownloadImage image. Storage Directory: $IMAGES_DIR)"
   echo "[$ACCESS_DATE] [INFO] $targetDownloadImage Image 내려 받기를 진행할게요. 저장 디렉터리: $IMAGES_DIR (proceed with downloading the $targetDownloadImage image. Storage Directory: $IMAGES_DIR)" >> "$LOG_FILE" 2>&1
@@ -231,7 +249,7 @@ downloadImage() {
 
 createdOpenStackImage() {
   local imageExtensionName="$1"
-  imageName="${imageExtensionName%.qcow2}"
+  imageName="${imageExtensionName%.img}"
 
   echo "[$ACCESS_DATE] [INFO] 내려 받은 이미지 $imageName 에 대해 OpenStack Image를 만들게요. (create an OpenStack image for the downloaded $imageName.)"
   echo "[$ACCESS_DATE] [INFO] 내려 받은 이미지 $imageName 에 대해 OpenStack Image를 만들게요. (create an OpenStack image for the downloaded $imageName.)" >> "$LOG_FILE" 2>&1
@@ -256,10 +274,31 @@ createdOpenStackImage() {
 
 deleteEnvironmentSetting() {
   local deleteTargetImageList=("$@")
+  local deleteTargetImage=$1
   imageDirectorySize=$(du -sh "$IMAGES_DIR")
   downloadImageList=$(ls -al "$IMAGES_DIR")
   deleteTargetImageListLength=${#deleteTargetImageList[@]}
   selectedImages=()
+
+  if [ "$deleteTargetImageListLength" -gt 1 ] && [ -z $deleteTargetImage ]; then
+    choiceDeleteImageList "${deleteTargetImageList[@]}"
+  else
+    choiceDeleteImage "$deleteTargetImage"
+
+    imageDirectorySize=$(du -sh "$IMAGES_DIR")
+    downloadImageList=$(ls -al "$IMAGES_DIR")
+
+    echo "[$ACCESS_DATE] [INFO] 삭제 뒤 Image 저장 디렉터리 용량 정보(Image Storage Directory Capacity Information After Delete) (GB) : $imageDirectorySize"
+    echo "[$ACCESS_DATE] [INFO] 삭제 뒤 Image 저장 디렉터리 용량 정보(Image Storage Directory Capacity Information After Delete) (GB) : $imageDirectorySize" >> "$LOG_FILE" 2>&1
+    echo "[$ACCESS_DATE] [INFO] 삭제 뒤 내려 받은 Image 목록(List of images downloaded after deletion) : $downloadImageList"
+    echo "[$ACCESS_DATE] [INFO] 삭제 뒤 내려 받은 Image 목록(List of images downloaded after deletion) : $downloadImageList" >> "$LOG_FILE" 2>&1
+    checkGlanceImageList
+  fi
+}
+
+choiceDeleteImageList() {
+  local deleteTargetImageList=("$@")
+  deleteTargetImageListLength=${#deleteTargetImageList[@]}
 
   for ((index=0; index < deleteTargetImageListLength; index++));
   do
@@ -273,11 +312,9 @@ deleteEnvironmentSetting() {
 
   read -r -p "Glance Image를 만들기 위해 내려 받은 Image를 삭제하실래요? (Would you like to delete the downloaded image to create the Glance Image?) (n(N) 혹은 no(NO)는 취소, y(Y), yes(YES)는 삭제 - Cancel n(N) or no(NO), delete y(Y) and yes(YES)?: " choiceDeleteOption
 
-  if [[ "$choiceDeleteOption" == "n" || "$choiceDeleteOption" == "no" ]];
-  then
+  if [[ "$choiceDeleteOption" == "n" || "$choiceDeleteOption" == "no" ]]; then
     return
-  elif [[ "$choiceDeleteOption" == "y" || "$choiceDeleteOption" == "yes" ]]
-  then
+  elif [[ "$choiceDeleteOption" == "y" || "$choiceDeleteOption" == "yes" ]]; then
       read -r -p "Image를 어떻게 삭제 할까요? 전체 삭제 0, 선택 삭제 1 (How do I delete the Image? Delete All 0, Delete Selections 1)" choiceDeleteDetailOption
 
       if [ "$choiceDeleteDetailOption" -eq 0 ];
@@ -333,28 +370,55 @@ deleteEnvironmentSetting() {
   checkGlanceImageList
 }
 
+choiceDeleteImage() {
+  read -r -p "Glance Image를 만들기 위해 내려 받은 Image를 삭제하실래요? (Would you like to delete the downloaded image to create the Glance Image?) (n(N) 혹은 no(NO)는 취소, y(Y), yes(YES)는 삭제 - Cancel n(N) or no(NO), delete y(Y) and yes(YES)?: " choiceDeleteOption
+
+    if [[ "$choiceDeleteOption" == "n" || "$choiceDeleteOption" == "no" ]]; then
+      return
+    elif [[ "$choiceDeleteOption" == "y" || "$choiceDeleteOption" == "yes" ]]; then
+      deleteImages "$deleteTargetImage"
+    fi
+}
+
 deleteImages() {
   local deleteTargetImageList=("$@")
+  local deleteTarget=$1
 
-  for deleteTargetImage in "${deleteTargetImageList[@]}";
-  do
-    (
-    echo "[$ACCESS_DATE] [DEBUG] 삭제 대상 이미지 이름(Delete target image name): $deleteTargetImage"
-    echo "[$ACCESS_DATE] [DEBUG] 삭제 대상 이미지 이름(Delete target image name): $deleteTargetImage" >> "$LOG_FILE" 2>&1
+  if [ "${#deleteTargetImageList}" -ge 1 ] && [ -z "$deleteTarget" ]; then
+    for deleteTargetImage in "${deleteTargetImageList[@]}"; do
+      (
+      echo "[$ACCESS_DATE] [DEBUG] 삭제 대상 이미지 이름(Delete target image name): $deleteTargetImage"
+      echo "[$ACCESS_DATE] [DEBUG] 삭제 대상 이미지 이름(Delete target image name): $deleteTargetImage" >> "$LOG_FILE" 2>&1
 
-    rm -rf "$IMAGES_DIR/$deleteTargetImage"
+      rm -rf "$IMAGES_DIR/$deleteTargetImage"
+      deleteCommandResponse=$?
+
+      if [ $deleteCommandResponse -eq 0 ]; then
+        echo "[$ACCESS_DATE] [INFO] $deleteTargetImage 삭제 성공 (Successfully deleted $deleteTargetImage): $deleteCommandResponse"
+        echo "[$ACCESS_DATE] [INFO] $deleteTargetImage 삭제 성공 (Successfully deleted $deleteTargetImage): $deleteCommandResponse" >> "$LOG_FILE" 2>&1
+      else
+        echo "[$ACCESS_DATE] [INFO] $deleteTargetImage 삭제 실패 (Failed to delete $deleteTargetImage): $deleteCommandResponse"
+        echo "[$ACCESS_DATE] [INFO] $deleteTargetImage 삭제 실패 (Failed to delete $deleteTargetImage): $deleteCommandResponse" >> "$LOG_FILE" 2>&1
+      fi
+      )&
+    done
+    wait
+
+  else
+    echo "[$ACCESS_DATE] [DEBUG] 삭제 대상 이미지 이름(Delete target image name): $deleteTarget"
+    echo "[$ACCESS_DATE] [DEBUG] 삭제 대상 이미지 이름(Delete target image name): $deleteTarget" >> "$LOG_FILE" 2>&1
+
+    rm -rf "$IMAGES_DIR/$deleteTarget"
     deleteCommandResponse=$?
 
     if [ $deleteCommandResponse -eq 0 ]; then
-      echo "[$ACCESS_DATE] [INFO] $deleteTargetImage 삭제 성공 (Successfully deleted $deleteTargetImage): $deleteCommandResponse"
-      echo "[$ACCESS_DATE] [INFO] $deleteTargetImage 삭제 성공 (Successfully deleted $deleteTargetImage): $deleteCommandResponse" >> "$LOG_FILE" 2>&1
+      echo "[$ACCESS_DATE] [INFO] $deleteTarget 삭제 성공 (Successfully deleted $deleteTarget): $deleteCommandResponse"
+      echo "[$ACCESS_DATE] [INFO] $deleteTarget 삭제 성공 (Successfully deleted $deleteTarget): $deleteCommandResponse" >> "$LOG_FILE" 2>&1
     else
-      echo "[$ACCESS_DATE] [INFO] $deleteTargetImage 삭제 실패 (Failed to delete $deleteTargetImage): $deleteCommandResponse"
-      echo "[$ACCESS_DATE] [INFO] $deleteTargetImage 삭제 실패 (Failed to delete $deleteTargetImage): $deleteCommandResponse" >> "$LOG_FILE" 2>&1
+      echo "[$ACCESS_DATE] [INFO] $deleteTarget 삭제 실패 (Failed to delete $deleteTarget): $deleteCommandResponse"
+      echo "[$ACCESS_DATE] [INFO] $deleteTarget 삭제 실패 (Failed to delete $deleteTarget): $deleteCommandResponse" >> "$LOG_FILE" 2>&1
     fi
-    )&
-  done
-  wait
+  fi
 }
 
 checkDeleteCommandResponse() {
@@ -374,10 +438,10 @@ checkDeleteCommandResponse() {
 
 checkGlanceImageList() {
   openstack image list
-  openStackImageList=$?
+  openStackImageListCount=$(openstack image list | grep -v '+' | grep -v 'ID' | grep -v 'Name' | grep -v 'Status' | wc -l)
 
-  echo "[$ACCESS_DATE] [NOTICE] 현재 보유중인 이미지 목록(List of images currently in possession): $openStackImageList"
-  echo "[$ACCESS_DATE] [NOTICE] 현재 보유중인 이미지 목록(List of images currently in possession): $openStackImageList" >> "$LOG_FILE" 2>&1
+  echo "[$ACCESS_DATE] [NOTICE] 현재 보유중인 이미지 목록(List of images currently in possession): $openStackImageListCount"
+  echo "[$ACCESS_DATE] [NOTICE] 현재 보유중인 이미지 목록(List of images currently in possession): $openStackImageListCount" >> "$LOG_FILE" 2>&1
 }
 
 echo "==== [$ACCESS_DATE] 오픈스택 $DOWNLOAD_OS_NAME 이미지 내려받기 스크립트 동작(Open Stack $DOWNLOAD_OS_NAME Image Download Script Behavior) ===="
