@@ -327,10 +327,7 @@ selectedByOptionOperationSystem() {
       ;;
       #break;;
     "7")
-      #selectedByUbuntuVersion
-      echo "[$ACCESS_DATE] [NOTICE] 현재 준비 중이에요. 빠르게 업데이트 해 드릴게요! 기대해 주세요. 😊(I'm preparing right now. I'll update you quickly! Please look forward to it. 😊)"
-      echo "[$ACCESS_DATE] [NOTICE] 현재 준비 중이에요. 빠르게 업데이트 해 드릴게요! 기대해 주세요. 😊(I'm preparing right now. I'll update you quickly! Please look forward to it. 😊)" >> "$LOG_FILE" 2>&1
-      ;;
+      selectedByUbuntuKind;;
       #break;;
     "8")
       #selectedBySUSEVersion
@@ -359,11 +356,11 @@ selectedByOptionOperationSystem() {
 }
 
 selectedByCentOsVersion() {
-  chmod +x ./centOs/centOs6/getCentOs6Images.sh
-  chmod +x ./centOs/centOs7/getCentOs7Images.sh
-  chmod +x ./centOs/centOs8/getCentOs8Images.sh
-  chmod +x ./centOs/centOs8Stream/getCentOs8StreamImages.sh
-  chmod +x ./centOs/centOs9Stream/getCentOs9StreamImages.sh
+  chmod +x "$ROOT_PATH"/createVirtualMachineImage/centOs/centOs6/getCentOs6Images.sh
+  chmod +x "$ROOT_PATH"/createVirtualMachineImage/centOs/centOs7/getCentOs7Images.sh
+  chmod +x "$ROOT_PATH"/createVirtualMachineImage/centOs/centOs8/getCentOs8Images.sh
+  chmod +x "$ROOT_PATH"/createVirtualMachineImage/centOs/centOs8Stream/getCentOs8StreamImages.sh
+  chmod +x "$ROOT_PATH"/createVirtualMachineImage/centOs/centOs9Stream/getCentOs9StreamImages.sh
 
   echo "어떤 Version Image를 만들고 싶으세요? 번호를 입력해 주세요.(What version image do you want to make? Please enter your number.)"
 
@@ -371,33 +368,35 @@ selectedByCentOsVersion() {
   do
     case $REPLY in
     "1")
-      ./centOs/centOs6/getCentOs6Images.sh
+      "$ROOT_PATH"/createVirtualMachineImage/centOs/centOs6/getCentOs6Images.sh
       break;;
     "2")
-      ./centOs/centOs7/getCentOs7Images.sh
+      "$ROOT_PATH"/createVirtualMachineImage/centOs/centOs7/getCentOs7Images.sh
       break;;
     "3")
-      ./centOs/centOs8/getCentOs8Images.sh
+      "$ROOT_PATH"/createVirtualMachineImage/centOs/centOs8/getCentOs8Images.sh
       break;;
     "4")
-      ./centOs/centOs8Stream/getCentOs8StreamImages.sh
+      "$ROOT_PATH"/createVirtualMachineImage/centOs/centOs8Stream/getCentOs8StreamImages.sh
       break;;
     "5")
-      ./centOs/centOs9Stream/getCentOs9StreamImages.sh
+      "$ROOT_PATH"/createVirtualMachineImage/centOs/centOs9Stream/getCentOs9StreamImages.sh
       break;;
     "6")
       break;;
+    "7")
+      exit 0;;
     *)
       echo "[$ACCESS_DATE] [WARNING] 올바른 선택이 아닙니다. 다시 선택해주세요.(This is not the correct choice. Please select again by entering only numbers.)"
       echo "[$ACCESS_DATE] [WARNING] 올바른 선택이 아닙니다. 다시 선택해주세요.(This is not the correct choice. Please select again by entering only numbers.)" >> "$LOG_FILE" 2>&1
     esac
   done
 
-  chmod -x ./centOs/centOs6/getCentOs6Images.sh
-  chmod -x ./centOs/centOs7/getCentOs7Images.sh
-  chmod -x ./centOs/centOs8/getCentOs8Images.sh
-  chmod -x ./centOs/centOs8Stream/getCentOs8StreamImages.sh
-  chmod -x ./centOs/centOs9Stream/getCentOs9StreamImages.sh
+  chmod -x "$ROOT_PATH"/createVirtualMachineImage/centOs/centOs6/getCentOs6Images.sh
+  chmod -x "$ROOT_PATH"/createVirtualMachineImage/centOs/centOs7/getCentOs7Images.sh
+  chmod -x "$ROOT_PATH"/createVirtualMachineImage/centOs/centOs8/getCentOs8Images.sh
+  chmod -x "$ROOT_PATH"/createVirtualMachineImage/centOs/centOs8Stream/getCentOs8StreamImages.sh
+  chmod -x "$ROOT_PATH"/createVirtualMachineImage/centOs/centOs9Stream/getCentOs9StreamImages.sh
 }
 
 selectedByFedoraVersion() {
@@ -408,9 +407,9 @@ selectedByFedoraVersion() {
     return
   elif [[ "$choiceContinueOption" == "y" || "$choiceContinueOption" == "yes" ]]
   then
-    chmod +x ./fedora/38/getFedora38Image.sh
-    ./fedora/38/getFedora38Image.sh
-    chmod -x ./fedora/38/getFedora38Image.sh
+    chmod +x "$ROOT_PATH"/createVirtualMachineImage/fedora/38/getFedora38Image.sh
+    "$ROOT_PATH"/createVirtualMachineImage/fedora/38/getFedora38Image.sh
+    chmod -x "$ROOT_PATH"/createVirtualMachineImage/fedora/38/getFedora38Image.sh
   else
     echo "[$ACCESS_DATE] [WARNING] 잘못된 문자를 입력했어요.(You entered the wrong character) - $imageListIndex"
     echo "[$ACCESS_DATE] [WARNING] 잘못된 문자를 입력했어요.(You entered the wrong character) - $imageListIndex" >> "$LOG_FILE" 2>&1
@@ -430,9 +429,9 @@ selectedByWindowsVersion() {
     return
   elif [[ "$choiceContinueOption" == "y" || "$choiceContinueOption" == "yes" ]]
   then
-    chmod +x ./windows/2012_r2/getWindows2012R2Image.sh
-    ./windows/2012_r2/getWindows2012R2Image.sh
-    chmod -x ./windows/2012_r2/getWindows2012R2Image.sh
+    chmod +x "$ROOT_PATH"/createVirtualMachineImage/windows/2012_r2/getWindows2012R2Image.sh
+    "$ROOT_PATH"/createVirtualMachineImage/windows/2012_r2/getWindows2012R2Image.sh
+    chmod -x "$ROOT_PATH"/createVirtualMachineImage/windows/2012_r2/getWindows2012R2Image.sh
   else
     echo "[$ACCESS_DATE] [WARNING] 잘못된 문자를 입력했어요.(You entered the wrong character) - $imageListIndex"
     echo "[$ACCESS_DATE] [WARNING] 잘못된 문자를 입력했어요.(You entered the wrong character) - $imageListIndex" >> "$LOG_FILE" 2>&1
@@ -441,12 +440,211 @@ selectedByWindowsVersion() {
   fi
 }
 
+selectedByUbuntuKind() {
+  echo "어떤 종류의 Image를 만들고 싶으세요? 번호를 입력해 주세요.(What version image do you want to make? Please enter your number.)"
+
+  select kind in "All Images" "unMinimal" "minimal" "뒤로 가기 (Back)" "종료(exit)"; do
+    case $REPLY in
+    "1")
+    getAllUbuntuUnMinimal
+    getAllUbuntuMinimal;;
+    "2")
+    selectedByUnMinimalVersion;;
+    "3")
+    selectedByMinimalVersion;;
+    "4")
+    break;;
+    "5")
+    exit 0;;
+    *)
+      echo "[$ACCESS_DATE] [WARNING] 올바른 선택이 아닙니다. 다시 선택해주세요.(This is not the correct choice. Please select again by entering only numbers.)"
+      echo "[$ACCESS_DATE] [WARNING] 올바른 선택이 아닙니다. 다시 선택해주세요.(This is not the correct choice. Please select again by entering only numbers.)" >> "$LOG_FILE" 2>&1
+    esac
+  done
+}
+
+selectedByUnMinimalVersion() {
+  echo "어떤 Version Image를 만들고 싶으세요? 번호를 입력해 주세요.(What version image do you want to make? Please enter your number.)"
+
+  select version in "All Images" "ubuntu18.04LTS" "ubuntu20.04LTS" "ubuntu22.04LTS" "ubuntu23.04" "ubuntu23.10" "뒤로 가기 (Back)" "종료(exit)"; do
+    case $REPLY in
+    "1")
+      getAllUbuntuUnMinimal;;
+    "2")
+      chmod +x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntu18.04LTS.sh
+      "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntu18.04LTS.sh
+      chmod -x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntu18.04LTS.sh;;
+    "3")
+      chmod +x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntu20.04LTS.sh
+      "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntu20.04LTS.sh
+      chmod -x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntu20.04LTS.sh;;
+    "4")
+      chmod +x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntu22.04LTS.sh
+      "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntu22.04LTS.sh
+      chmod -x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntu22.04LTS.sh;;
+    "5")
+      chmod +x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntu23.04.sh
+      "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntu23.04.sh
+      chmod -x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntu23.04.sh;;
+    "6")
+      chmod +x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntu23.10.sh
+      "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntu23.10.sh
+      chmod -x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntu23.10.sh;;
+    "7")
+      break;;
+    "8")
+      exit 0;;
+    *)
+      echo "[$ACCESS_DATE] [WARNING] 올바른 선택이 아닙니다. 다시 선택해주세요.(This is not the correct choice. Please select again by entering only numbers.)"
+      echo "[$ACCESS_DATE] [WARNING] 올바른 선택이 아닙니다. 다시 선택해주세요.(This is not the correct choice. Please select again by entering only numbers.)" >> "$LOG_FILE" 2>&1
+    esac
+  done
+}
+
+getAllUbuntuUnMinimal() {
+  chmod +x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntu18.04LTS.sh
+  "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntu18.04LTS.sh
+  chmod -x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntu18.04LTS.sh
+
+  chmod +x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntu20.04LTS.sh
+  "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntu20.04LTS.sh
+  chmod -x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntu20.04LTS.sh
+
+  chmod +x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntu22.04LTS.sh
+  "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntu22.04LTS.sh
+  chmod -x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntu22.04LTS.sh
+
+  chmod +x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntu23.04.sh
+  "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntu23.04.sh
+  chmod -x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntu23.04.sh
+
+  chmod +x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntu23.10.sh
+  "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntu23.10.sh
+  chmod -x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntu23.10.sh
+}
+
+selectedByMinimalVersion() {
+  echo "어떤 Minimal Version Image를 만들고 싶으세요? 번호를 입력해 주세요.(What Minimal version image do you want to make? Please enter your number.)"
+
+  select version in "All Images" "ubuntuMinimal16.04LTS" "ubuntuMinimal18.04LTS" "ubuntuMinimal18.10" "ubuntuMinimal19.04" "ubuntuMinimal19.10" "ubuntuMinimal20.04" "ubuntuMinimal20.10" "ubuntuMinimal21.04" "ubuntuMinimal21.10" "ubuntuMinimal22.04LTS" "ubuntuMinimal22.10" "ubuntuMinimal23.04" "ubuntuMinimal23.10" "뒤로 가기 (Back)" "종료(exit)"; do
+    case $REPLY in
+    "1")
+      getAllUbuntuMinimal;;
+    "2")
+      chmod +x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal18.04LTS.sh
+      "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal18.04LTS.sh
+      chmod -x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal18.04LTS.sh;;
+    "3")
+      chmod +x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal18.10.sh
+      "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal18.10.sh
+      chmod -x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal18.10.sh;;
+    "4")
+      chmod +x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal19.04.sh
+      "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal19.04.sh
+      chmod -x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal19.04.sh;;
+    "5")
+      chmod +x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal19.10.sh
+      "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal19.10.sh
+      chmod -x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal19.10.sh;;
+    "6")
+      chmod +x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal20.04.sh
+      "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal20.04.sh
+      chmod -x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal20.04.sh;;
+    "7")
+      chmod +x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal20.10.sh
+      "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal20.10.sh
+      chmod -x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal20.10.sh;;
+    "8")
+      chmod +x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal21.04.sh
+      "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal21.04.sh
+      chmod -x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal21.04.sh;;
+    "9")
+      chmod +x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal21.10.sh
+      "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal21.10.sh
+      chmod -x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal21.10.sh;;
+    "10")
+      chmod +x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal22.04LTS.sh
+      "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal22.04LTS.sh
+      chmod -x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal22.04LTS.sh;;
+    "11")
+      chmod +x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal22.10.sh
+      "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal22.10.sh
+      chmod -x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal22.10.sh;;
+    "12")
+      chmod +x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal23.04.sh
+      "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal23.04.sh
+      chmod -x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal23.04.sh;;
+    "13")
+      chmod +x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal23.10.sh
+      "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal23.10.sh
+      chmod -x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal23.10.sh;;
+    "14")
+      break;;
+    "15")
+      exit 0;;
+    *)
+      echo "[$ACCESS_DATE] [WARNING] 올바른 선택이 아닙니다. 다시 선택해주세요.(This is not the correct choice. Please select again by entering only numbers.)"
+      echo "[$ACCESS_DATE] [WARNING] 올바른 선택이 아닙니다. 다시 선택해주세요.(This is not the correct choice. Please select again by entering only numbers.)" >> "$LOG_FILE" 2>&1
+    esac
+  done
+}
+
+getAllUbuntuMinimal() {
+  chmod +x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal18.04LTS.sh
+  "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal18.04LTS.sh
+  chmod -x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal18.04LTS.sh
+
+  chmod +x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal18.10.sh
+  "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal18.10.sh
+  chmod -x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal18.10.sh
+
+  chmod +x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal19.04.sh
+  "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal19.04.sh
+  chmod -x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal19.04.sh
+
+  chmod +x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal19.10.sh
+  "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal19.10.sh
+  chmod -x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal19.10.sh
+
+  chmod +x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal20.04.sh
+  "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal20.04.sh
+  chmod -x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal20.04.sh
+
+  chmod +x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal20.10.sh
+  "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal20.10.sh
+  chmod -x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal20.10.sh
+
+  chmod +x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal21.04.sh
+  "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal21.04.sh
+  chmod -x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal21.04.sh
+
+  chmod +x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal21.10.sh
+  "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal21.10.sh
+  chmod -x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal21.10.sh
+
+  chmod +x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal22.04LTS.sh
+  "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal22.04LTS.sh
+  chmod -x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal22.04LTS.sh
+
+  chmod +x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal22.10.sh
+  "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal22.10.sh
+  chmod -x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal22.10.sh
+
+  chmod +x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal23.04.sh
+  "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal23.04.sh
+  chmod -x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal23.04.sh
+
+  chmod +x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal23.10.sh
+  "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal23.10.sh
+  chmod -x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/minimal/getUbuntuMinimal23.10.sh
+}
+
 checkGlanceImageList() {
   openstack image list
-  openStackImageList=$?
+  openStackImageListCount=$(openstack image list | grep -v '+' | grep -v 'ID' | grep -v 'Name' | grep -v 'Status' | wc -l)
 
-  echo "[$ACCESS_DATE] [NOTICE] 현재 보유중인 이미지 목록(List of images currently in possession): $openStackImageList"
-  echo "[$ACCESS_DATE] [NOTICE] 현재 보유중인 이미지 목록(List of images currently in possession): $openStackImageList" >> "$LOG_FILE" 2>&1
+  echo "[$ACCESS_DATE] [NOTICE] 현재 보유중인 이미지 목록(List of images currently in possession): $openStackImageListCount"
+  echo "[$ACCESS_DATE] [NOTICE] 현재 보유중인 이미지 목록(List of images currently in possession): $openStackImageListCount" >> "$LOG_FILE" 2>&1
 }
 
 echo "==== [$ACCESS_DATE] 오픈스택 CentOS 이미지 내려받기 스크립트 동작(Open Stack Image Download Script Behavior) ===="
