@@ -327,7 +327,7 @@ selectedByOptionOperationSystem() {
       ;;
       #break;;
     "7")
-      #selectedByUbuntuVersion
+      selectedByUbuntuVersion
       echo "[$ACCESS_DATE] [NOTICE] 현재 준비 중이에요. 빠르게 업데이트 해 드릴게요! 기대해 주세요. 😊(I'm preparing right now. I'll update you quickly! Please look forward to it. 😊)"
       echo "[$ACCESS_DATE] [NOTICE] 현재 준비 중이에요. 빠르게 업데이트 해 드릴게요! 기대해 주세요. 😊(I'm preparing right now. I'll update you quickly! Please look forward to it. 😊)" >> "$LOG_FILE" 2>&1
       ;;
@@ -359,11 +359,11 @@ selectedByOptionOperationSystem() {
 }
 
 selectedByCentOsVersion() {
-  chmod +x ./centOs/centOs6/getCentOs6Images.sh
-  chmod +x ./centOs/centOs7/getCentOs7Images.sh
-  chmod +x ./centOs/centOs8/getCentOs8Images.sh
-  chmod +x ./centOs/centOs8Stream/getCentOs8StreamImages.sh
-  chmod +x ./centOs/centOs9Stream/getCentOs9StreamImages.sh
+  chmod +x "$ROOT_PATH"/createVirtualMachineImage/centOs/centOs6/getCentOs6Images.sh
+  chmod +x "$ROOT_PATH"/createVirtualMachineImage/centOs/centOs7/getCentOs7Images.sh
+  chmod +x "$ROOT_PATH"/createVirtualMachineImage/centOs/centOs8/getCentOs8Images.sh
+  chmod +x "$ROOT_PATH"/createVirtualMachineImage/centOs/centOs8Stream/getCentOs8StreamImages.sh
+  chmod +x "$ROOT_PATH"/createVirtualMachineImage/centOs/centOs9Stream/getCentOs9StreamImages.sh
 
   echo "어떤 Version Image를 만들고 싶으세요? 번호를 입력해 주세요.(What version image do you want to make? Please enter your number.)"
 
@@ -371,33 +371,35 @@ selectedByCentOsVersion() {
   do
     case $REPLY in
     "1")
-      ./centOs/centOs6/getCentOs6Images.sh
+      "$ROOT_PATH"/createVirtualMachineImage/centOs/centOs6/getCentOs6Images.sh
       break;;
     "2")
-      ./centOs/centOs7/getCentOs7Images.sh
+      "$ROOT_PATH"/createVirtualMachineImage/centOs/centOs7/getCentOs7Images.sh
       break;;
     "3")
-      ./centOs/centOs8/getCentOs8Images.sh
+      "$ROOT_PATH"/createVirtualMachineImage/centOs/centOs8/getCentOs8Images.sh
       break;;
     "4")
-      ./centOs/centOs8Stream/getCentOs8StreamImages.sh
+      "$ROOT_PATH"/createVirtualMachineImage/centOs/centOs8Stream/getCentOs8StreamImages.sh
       break;;
     "5")
-      ./centOs/centOs9Stream/getCentOs9StreamImages.sh
+      "$ROOT_PATH"/createVirtualMachineImage/centOs/centOs9Stream/getCentOs9StreamImages.sh
       break;;
     "6")
       break;;
+    "7")
+      exit 0;;
     *)
       echo "[$ACCESS_DATE] [WARNING] 올바른 선택이 아닙니다. 다시 선택해주세요.(This is not the correct choice. Please select again by entering only numbers.)"
       echo "[$ACCESS_DATE] [WARNING] 올바른 선택이 아닙니다. 다시 선택해주세요.(This is not the correct choice. Please select again by entering only numbers.)" >> "$LOG_FILE" 2>&1
     esac
   done
 
-  chmod -x ./centOs/centOs6/getCentOs6Images.sh
-  chmod -x ./centOs/centOs7/getCentOs7Images.sh
-  chmod -x ./centOs/centOs8/getCentOs8Images.sh
-  chmod -x ./centOs/centOs8Stream/getCentOs8StreamImages.sh
-  chmod -x ./centOs/centOs9Stream/getCentOs9StreamImages.sh
+  chmod -x "$ROOT_PATH"/createVirtualMachineImage/centOs/centOs6/getCentOs6Images.sh
+  chmod -x "$ROOT_PATH"/createVirtualMachineImage/centOs/centOs7/getCentOs7Images.sh
+  chmod -x "$ROOT_PATH"/createVirtualMachineImage/centOs/centOs8/getCentOs8Images.sh
+  chmod -x "$ROOT_PATH"/createVirtualMachineImage/centOs/centOs8Stream/getCentOs8StreamImages.sh
+  chmod -x "$ROOT_PATH"/createVirtualMachineImage/centOs/centOs9Stream/getCentOs9StreamImages.sh
 }
 
 selectedByFedoraVersion() {
@@ -408,9 +410,9 @@ selectedByFedoraVersion() {
     return
   elif [[ "$choiceContinueOption" == "y" || "$choiceContinueOption" == "yes" ]]
   then
-    chmod +x ./fedora/38/getFedora38Image.sh
-    ./fedora/38/getFedora38Image.sh
-    chmod -x ./fedora/38/getFedora38Image.sh
+    chmod +x "$ROOT_PATH"/createVirtualMachineImage/fedora/38/getFedora38Image.sh
+    "$ROOT_PATH"/createVirtualMachineImage/fedora/38/getFedora38Image.sh
+    chmod -x "$ROOT_PATH"/createVirtualMachineImage/fedora/38/getFedora38Image.sh
   else
     echo "[$ACCESS_DATE] [WARNING] 잘못된 문자를 입력했어요.(You entered the wrong character) - $imageListIndex"
     echo "[$ACCESS_DATE] [WARNING] 잘못된 문자를 입력했어요.(You entered the wrong character) - $imageListIndex" >> "$LOG_FILE" 2>&1
@@ -430,15 +432,111 @@ selectedByWindowsVersion() {
     return
   elif [[ "$choiceContinueOption" == "y" || "$choiceContinueOption" == "yes" ]]
   then
-    chmod +x ./windows/2012_r2/getWindows2012R2Image.sh
-    ./windows/2012_r2/getWindows2012R2Image.sh
-    chmod -x ./windows/2012_r2/getWindows2012R2Image.sh
+    chmod +x "$ROOT_PATH"/createVirtualMachineImage/windows/2012_r2/getWindows2012R2Image.sh
+    "$ROOT_PATH"/createVirtualMachineImage/windows/2012_r2/getWindows2012R2Image.sh
+    chmod -x "$ROOT_PATH"/createVirtualMachineImage/windows/2012_r2/getWindows2012R2Image.sh
   else
     echo "[$ACCESS_DATE] [WARNING] 잘못된 문자를 입력했어요.(You entered the wrong character) - $imageListIndex"
     echo "[$ACCESS_DATE] [WARNING] 잘못된 문자를 입력했어요.(You entered the wrong character) - $imageListIndex" >> "$LOG_FILE" 2>&1
 
     selectedByWindowsVersion
   fi
+}
+
+selectedByUbuntuVersion() {
+
+  echo "어떤 Version Image를 만들고 싶으세요? 번호를 입력해 주세요.(What version image do you want to make? Please enter your number.)"
+
+  select version in "All Images" "ubuntu8" "ubuntu10" "ubuntu11" "ubuntu12" "ubuntu13" "ubuntu14" "ubuntu15" "ubuntu16" "ubuntu17" "ubuntu18" "ubuntu19" "ubuntu20" "ubuntu21" "ubuntu22" "ubuntu23" "뒤로 가기 (Back)" "종료(exit)";
+  do
+    case $REPLY in
+    "1")
+      break;;
+    "2")
+      chmod +x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntu8.sh
+      "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntu8.sh
+      chmod -x "$ROOT_PATH"/createVirtualMachineImage/getUbuntu8.sh;;
+    "3")
+      chmod +x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntuXenial.sh
+      "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntuXenial.sh
+      chmod -x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntuXenial.sh;;
+    "4")
+      chmod +x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntuBionic.sh
+      "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntuBionic.sh
+      chmod -x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntuBionic.sh;;
+    "5")
+      chmod +x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntuFocal.sh
+      "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntuFocal.sh
+      chmod -x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntuFocal.sh;;
+    "6")
+      chmod +x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntuJammy.sh
+      "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntuJammy.sh
+      chmod -x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntuJammy.sh;;
+    "7")
+      chmod +x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntuLunar.sh
+      "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntuLunar.sh
+      chmod -x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntuLunar.sh;;
+    "8")
+      chmod +x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntuMantic.sh
+      "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntuMantic.sh
+      chmod -x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntuMantic.sh;;
+    "9")
+      chmod +x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntuMinimalXenial.sh
+      "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntuMinimalXenial.sh
+      chmod -x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntuMinimalXenial.sh;;
+    "10")
+      chmod +x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntuMinimalBoinic.sh
+      "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntuMinimalBoinic.sh
+      chmod -x "$ROOT_PATH"/createVirtualMachineImage/boinic/getUbuntuMinimalBoinic.sh;;
+    "11")
+      chmod +x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntuMinimalCosmic.sh
+      "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntuMinimalCosmic.sh
+      chmod -x "$ROOT_PATH"/createVirtualMachineImage/cosmic/getUbuntuMinimalCosmic.sh;;
+    "12")
+      chmod +x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntuMinimalDisco.sh
+      "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntuMinimalDisco.sh
+      chmod -x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntuMinimalDisco.sh;;
+    "13")
+      chmod +x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntuEoan.sh
+      "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntuEoan.sh
+      chmod -x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntuEoan.sh;;
+    "14")
+      chmod +x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntuFocal.sh
+      "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntuFocal.sh
+      chmod -x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntuFocal.sh;;
+    "15")
+      chmod +x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntuGroovy.sh
+      "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntuGroovy.sh
+      chmod -x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntuGroovy.sh;;
+    "16")
+      chmod +x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntuHirsute.sh
+      "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntuHirsute.sh
+      chmod -x "$ROOT_PATH"/createVirtualMachineImage/hirsute/getUbuntuHirsute.sh;;
+    "17")
+      chmod +x "$ROOT_PATH"/createVirtualMachineImage/impish/getUbuntuImpish.sh
+      "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntuImpish.sh
+      chmod -x "$ROOT_PATH"/createVirtualMachineImage/impish/getUbuntuImpish.sh;;
+    "18")
+      chmod +x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntuJammy.sh
+      "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntuJammy.sh
+      chmod -x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntuJammy.sh;;
+    "19")
+      chmod +x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntuKinetci.sh
+      "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntuKinetci.sh
+      chmod -x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntuKinetci.sh;;
+    "20")
+      chmod +x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntuLunar.sh
+      "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntuLunar.sh
+      chmod -x "$ROOT_PATH"/createVirtualMachineImage/ubuntu/getUbuntuLunar.sh;;
+    "21")
+      break;;
+    "22")
+      exit 0;;
+    *)
+      echo "[$ACCESS_DATE] [WARNING] 올바른 선택이 아닙니다. 다시 선택해주세요.(This is not the correct choice. Please select again by entering only numbers.)"
+      echo "[$ACCESS_DATE] [WARNING] 올바른 선택이 아닙니다. 다시 선택해주세요.(This is not the correct choice. Please select again by entering only numbers.)" >> "$LOG_FILE" 2>&1
+    esac
+  done
 }
 
 checkGlanceImageList() {
